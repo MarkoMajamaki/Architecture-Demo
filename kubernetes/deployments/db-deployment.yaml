@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: architecture-demo-db-deployment
+  namespace: architecture-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: architecture-demo-db
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: architecture-demo-db
+    spec:
+      containers:
+      - name: architecture-demo-db-container
+        image: mcr.microsoft.com/mssql/server:latest
+        ports:
+        - containerPort: 1433
+        env:
+          - name: "ACCEPT_EULA"
+            value: "Y"
+          - name: "SA_PASSWORD"
+            value: "Password_123"
+          - name: "MSSQL_PID"
+            value: "Express"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

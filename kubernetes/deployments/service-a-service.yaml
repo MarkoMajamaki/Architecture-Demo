@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: architecture-demo-service-a
+  namespace: architecture-demo
+spec:
+  type: NodePort
+  selector:
+    app: service-a-pod
+  ports:
+  - port: 80
+    targetPort: 80

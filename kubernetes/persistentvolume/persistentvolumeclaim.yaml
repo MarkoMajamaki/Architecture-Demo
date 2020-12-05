@@ -1,0 +1,11 @@
+apiVersion: 1
+kind: PersistentVolumeClaim
+metadata: 
+  name: architecture-demo-claim
+spec:
+  storageClassName: hosthpath
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: 50Mi
