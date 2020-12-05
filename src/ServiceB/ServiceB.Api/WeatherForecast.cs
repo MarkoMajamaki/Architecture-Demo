@@ -1,6 +1,6 @@
 using System;
 
-namespace ServiceA
+namespace ServiceB.Api
 {
     public class WeatherForecast
     {

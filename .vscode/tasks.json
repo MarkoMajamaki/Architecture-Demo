@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/ServiceA/ServiceA.csproj",
+                "${workspaceFolder}/src/ServiceA/ServiceA.Api/ServiceA.Api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/ServiceA/ServiceA.csproj",
+                "${workspaceFolder}/src/ServiceA/ServiceA.Api/ServiceA.Api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,44 +32,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/src/ServiceA/ServiceA.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/src/ServiceB/ServiceB.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "publish",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/src/ServiceB/ServiceB.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
-            ],
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "watch",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "watch",
-                "run",
-                "${workspaceFolder}/src/ServiceB/ServiceB.csproj",
+                "${workspaceFolder}/src/ServiceA/ServiceA.Api/ServiceA.Api.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -84,12 +47,12 @@
             "dockerBuild": {
                 "tag": "architecturedemo:dev",
                 "target": "base",
-                "dockerfile": "${workspaceFolder}/src/ServiceB/Dockerfile",
+                "dockerfile": "${workspaceFolder}/src/ServiceB/ServiceB.Api/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.csproj"
+                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.Api/ServiceB.Api.csproj"
             }
         },
         {
@@ -100,12 +63,12 @@
             ],
             "dockerBuild": {
                 "tag": "architecturedemo:latest",
-                "dockerfile": "${workspaceFolder}/src/ServiceB/Dockerfile",
+                "dockerfile": "${workspaceFolder}/src/ServiceB/ServiceB.Api/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
             "netCore": {
-                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.csproj"
+                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.Api/ServiceB.Api.csproj"
             }
         },
         {
@@ -116,7 +79,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.csproj",
+                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.Api/ServiceB.Api.csproj",
                 "enableDebugging": true,
                 "configureSsl": false
             }
@@ -129,7 +92,7 @@
             ],
             "dockerRun": {},
             "netCore": {
-                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.csproj"
+                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.Api/ServiceB.Api.csproj"
             }
         }
     ]
