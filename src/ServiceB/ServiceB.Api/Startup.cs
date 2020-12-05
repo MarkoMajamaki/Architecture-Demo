@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ServiceB.Infrastructure;
 
 namespace ServiceB.Api
 {
@@ -26,12 +28,22 @@ namespace ServiceB.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ServiceB.Api", Version = "v1" });
             });
+
+            String server = Configuration["DatabaseServer"] ?? "localhost";
+            string port = Configuration["DatabasePort"] ?? "1433";
+            string user = Configuration["DatabaseUser"] ?? "sa";
+            string password = Configuration["DatabasePassword"] ?? "mssQlp4ssword#";
+            string database = Configuration["DatabaseName"] ?? "service-b-db";
+
+            string connectionString = $"Server={server},{port};Initial Catalog={database};User={user};Password={password}";
+
+            // For Entity Framework  
+            services.AddDbContext<ServiceBContext>(options => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("ServiceB.Infrastructure")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
