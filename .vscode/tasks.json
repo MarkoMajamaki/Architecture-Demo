@@ -47,7 +47,7 @@
             "dockerBuild": {
                 "tag": "architecturedemo:dev",
                 "target": "base",
-                "dockerfile": "${workspaceFolder}/src/ServiceB/ServiceB.Api/Dockerfile",
+                "dockerfile": "${workspaceFolder}/src/ServiceB/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },
@@ -63,7 +63,7 @@
             ],
             "dockerBuild": {
                 "tag": "architecturedemo:latest",
-                "dockerfile": "${workspaceFolder}/src/ServiceB/ServiceB.Api/Dockerfile",
+                "dockerfile": "${workspaceFolder}/src/ServiceB/Dockerfile",
                 "context": "${workspaceFolder}",
                 "pull": true
             },

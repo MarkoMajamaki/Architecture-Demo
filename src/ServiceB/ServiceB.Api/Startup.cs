@@ -38,7 +38,7 @@ namespace ServiceB.Api
             string port = Configuration["DatabasePort"] ?? "1433";
             string user = Configuration["DatabaseUser"] ?? "sa";
             string password = Configuration["DatabasePassword"] ?? "mssQlp4ssword#";
-            string database = Configuration["DatabaseName"] ?? "service-b-db";
+            string database = Configuration["DatabaseName"] ?? "service-b";
 
             string connectionString = $"Server={server},{port};Initial Catalog={database};User={user};Password={password}";
 
