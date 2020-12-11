@@ -14,3 +14,4 @@ src/ServiceB/ServiceB.Application/bin
 src/ServiceB/ServiceB.Api/bin
 src/ServiceB/ServiceB.Infrastructure/bin
 src/ServiceB/ServiceB.Domain/bin
+kubernetes/sqlserver/

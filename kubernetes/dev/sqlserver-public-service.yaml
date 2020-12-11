@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: architecture-demo-db-service
+  name: sqlserver-public-service
   namespace: architecture-demo
 spec:
-  type: ClusterIP
   selector:
-    app: architecture-demo-db
+    app: sqlserver-pod
+  type: LoadBalancer
   ports:
   - protocol: TCP
     port: 1433
