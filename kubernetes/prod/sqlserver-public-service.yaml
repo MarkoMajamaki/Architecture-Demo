@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlserver-public-service
+  namespace: architecture-demo
+spec:
+  selector:
+    app: sqlserver-pod
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 1433
+    targetPort: 1433
