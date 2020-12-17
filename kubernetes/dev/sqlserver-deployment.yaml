@@ -56,7 +56,7 @@ metadata:
 spec:
   selector:
     app: sqlserver-pod
-  type: NodePort
+  type: ClusterIP
   ports:
   - protocol: TCP
     port: 1433

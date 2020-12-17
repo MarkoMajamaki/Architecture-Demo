@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-a-deployment
+  name: service-b-deployment
   namespace: architecture-demo
 spec:
   selector:
     matchLabels:
-      app: service-a-pod
+      app: service-b-pod
   template:
     metadata:
       labels:
-        app: service-a-pod
+        app: service-b-pod
     spec:
       containers:
-      - name: service-a-container
-        image: majamakm/service-a:v1
+      - name: service-b-container
+        image: majamakm/service-b:v1
         env:
           - name: DatabaseServer
             value: "sqlserver-service"
@@ -28,7 +28,7 @@ spec:
                 name: secrets
                 key: SA_PASSWORD 
           - name: DatabaseName
-            value: "service-a"            
+            value: "service-b"            
         resources:
           limits:
             memory: "128Mi"
@@ -39,12 +39,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-a
+  name: service-b
   namespace: architecture-demo
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
-    app: service-a-pod
+    app: service-b-pod
   ports:
   - port: 80
     targetPort: 80
