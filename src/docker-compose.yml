@@ -1,0 +1,46 @@
+version: '3.7'
+
+services:
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "mssQlp4ssword#"
+    ports:
+      - "1433:1433"  
+
+  orderapi:
+    image: architecture_demo/orderapi
+    container_name: orderapi
+    build:
+      context: ./OrderApi
+      dockerfile: Dockerfile
+    depends_on: 
+      - sqlserver
+    environment: 
+      DatabaseServer: "sqlserver"
+      DatabasePort: "1433"
+      DatabaseUser: "sa"
+      DatabasePassword: "mssQlp4ssword#"
+      DatabaseName: "order"
+    ports:
+      - "8001:80"
+
+  customerapi:
+    image: architecture_demo/customerapi
+    container_name: customerapi
+    build:
+      context: ./CustomerApi
+      dockerfile: Dockerfile
+    depends_on: 
+      - sqlserver
+    environment: 
+      DatabaseServer: "sqlserver"
+      DatabasePort: "1433"
+      DatabaseUser: "sa"
+      DatabasePassword: "mssQlp4ssword#"
+      DatabaseName: "customer"
+    ports:
+      - "8002:80"

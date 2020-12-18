@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/ServiceA/ServiceA.Api/ServiceA.Api.csproj",
+                "${workspaceFolder}/src/CustomerApi/CustomerApi/CustomerApi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/ServiceA/ServiceA.Api/ServiceA.Api.csproj",
+                "${workspaceFolder}/src/CustomerApi/CustomerApi/CustomerApi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -32,68 +32,48 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/src/ServiceA/ServiceA.Api/ServiceA.Api.csproj",
+                "${workspaceFolder}/src/CustomerApi/CustomerApi/CustomerApi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
         },
         {
-            "type": "docker-build",
-            "label": "docker-build: debug",
-            "dependsOn": [
-                "build"
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/OrderApi/OrderApi/OrderApi.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
             ],
-            "dockerBuild": {
-                "tag": "architecturedemo:dev",
-                "target": "base",
-                "dockerfile": "${workspaceFolder}/src/ServiceB/Dockerfile",
-                "context": "${workspaceFolder}",
-                "pull": true
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.Api/ServiceB.Api.csproj"
-            }
+            "problemMatcher": "$msCompile"
         },
         {
-            "type": "docker-build",
-            "label": "docker-build: release",
-            "dependsOn": [
-                "build"
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/src/OrderApi/OrderApi/OrderApi.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
             ],
-            "dockerBuild": {
-                "tag": "architecturedemo:latest",
-                "dockerfile": "${workspaceFolder}/src/ServiceB/Dockerfile",
-                "context": "${workspaceFolder}",
-                "pull": true
-            },
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.Api/ServiceB.Api.csproj"
-            }
+            "problemMatcher": "$msCompile"
         },
         {
-            "type": "docker-run",
-            "label": "docker-run: debug",
-            "dependsOn": [
-                "docker-build: debug"
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/src/OrderApi/OrderApi/OrderApi.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
             ],
-            "dockerRun": {},
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.Api/ServiceB.Api.csproj",
-                "enableDebugging": true,
-                "configureSsl": false
-            }
-        },
-        {
-            "type": "docker-run",
-            "label": "docker-run: release",
-            "dependsOn": [
-                "docker-build: release"
-            ],
-            "dockerRun": {},
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/ServiceB/ServiceB.Api/ServiceB.Api.csproj"
-            }
+            "problemMatcher": "$msCompile"
         }
     ]
 }

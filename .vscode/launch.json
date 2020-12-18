@@ -5,14 +5,16 @@
    "version": "0.2.0",
    "configurations": [
         {
-            "name": "ServiceA",
+            "name": "CustomerApi",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/ServiceA/ServiceA.Api/bin/Debug/net5.0/ServiceA.Api.dll",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/src/CustomerApi/CustomerApi/bin/Debug/net5.0/CustomerApi.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/ServiceA/ServiceA.Api",
+            "cwd": "${workspaceFolder}/src/CustomerApi/CustomerApi",
             "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
                 "action": "openExternally",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
@@ -23,16 +25,18 @@
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
-        },   
+        },
         {
-            "name": "ServiceB",
+            "name": "OrderApi",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/ServiceB/ServiceB.Api/bin/Debug/net5.0/ServiceB.Api.dll",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/src/OrderApi/OrderApi/bin/Debug/net5.0/OrderApi.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/ServiceB/ServiceB.Api",
+            "cwd": "${workspaceFolder}/src/OrderApi/OrderApi",
             "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
                 "action": "openExternally",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
@@ -43,6 +47,12 @@
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
         }
     ]
 }
