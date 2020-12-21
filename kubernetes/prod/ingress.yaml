@@ -13,14 +13,14 @@ spec:
   - http:
       paths:
       - backend:
-          serviceName: service-a
+          serviceName: customer-api-service
           servicePort: 80
         path: /a(/|$)(.*)
       - backend:
-          serviceName: service-b
+          serviceName: order-api-service
           servicePort: 80
         path: /b(/|$)(.*)
       - backend:
-          serviceName: service-a
+          serviceName: customer-api-service
           servicePort: 80
         path: /(.*)

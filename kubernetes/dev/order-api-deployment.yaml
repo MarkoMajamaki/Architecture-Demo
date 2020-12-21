@@ -1,23 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-b-deployment
+  name: order-api-deployment
   namespace: architecture-demo
 spec:
   selector:
     matchLabels:
-      app: service-b-pod
+      app: order-api-pod
   template:
     metadata:
       labels:
-        app: service-b-pod
+        app: order-api-pod
     spec:
       containers:
-      - name: service-b-container
-        image: majamakm/service-b:v1
+      - name: order-api-container
+        image: architecture_demo/order-api:v1
         env:
           - name: DatabaseServer
             value: "sqlserver-service"
+          - name: DatabaseName
+            value: "order-db" 
           - name: DatabasePort
             value: "1433"
           - name: DatabaseUser
@@ -25,10 +27,8 @@ spec:
           - name: DatabasePassword
             valueFrom:
               secretKeyRef:
-                name: secrets
-                key: SA_PASSWORD 
-          - name: DatabaseName
-            value: "service-b"            
+                name: architecture-demo-secrets
+                key: SA_PASSWORD            
         resources:
           limits:
             memory: "128Mi"
@@ -39,12 +39,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-b
+  name: order-api-service
   namespace: architecture-demo
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
-    app: service-b-pod
+    app: order-api-pod
   ports:
-  - port: 80
+  - protocol: TCP
+    port: 80
     targetPort: 80

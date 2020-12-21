@@ -6,10 +6,10 @@ namespace CustomerApi.Controllers
     [Route("[controller]")]
     public class TestController : ControllerBase
     {
-        [HttpGet]
-        public string Get()
+        [HttpGet("Test")]
+        public string Test()
         {
-            return "Order Api test";
+            return "Order Api test succeeded!";
         }
     }
 }

@@ -3,22 +3,24 @@ kind: Ingress
 metadata:
   name: ingress
   namespace: architecture-demo
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
     - host: architecture-demo.info
       http:
         paths:
-          - path: /a
+          - path: /customer(/|$)(.*)
             pathType: Prefix
             backend:
               service:
-                name: service-a
+                name: customer-api-service
                 port:
                   number: 80
-          - path: /b
+          - path: /order(/|$)(.*)
             pathType: Prefix
             backend:
               service:
-                name: service-b
+                name: order-api-service
                 port:
                   number: 80                  

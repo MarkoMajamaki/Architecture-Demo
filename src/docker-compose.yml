@@ -12,7 +12,7 @@ services:
       - "1433:1433"  
 
   orderapi:
-    image: architecture_demo/orderapi
+    image: architecture_demo/order-api:v1
     container_name: orderapi
     build:
       context: ./OrderApi
@@ -29,7 +29,7 @@ services:
       - "8001:80"
 
   customerapi:
-    image: architecture_demo/customerapi
+    image: architecture_demo/customer-api:v1
     container_name: customerapi
     build:
       context: ./CustomerApi

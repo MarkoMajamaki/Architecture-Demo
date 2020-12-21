@@ -1,23 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: service-a-deployment
+  name: customer-api-deployment
   namespace: architecture-demo
 spec:
   selector:
     matchLabels:
-      app: service-a-pod
+      app: customer-api-pod
   template:
     metadata:
       labels:
-        app: service-a-pod
+        app: customer-api-pod
     spec:
       containers:
-      - name: service-a-container
-        image: majamakm/service-a:v1
+      - name: customer-api-container
+        image: architecture_demo/customer-api:v1
         env:
           - name: DatabaseServer
             value: "sqlserver-service"
+          - name: DatabaseName
+            value: "customer-db"
           - name: DatabasePort
             value: "1433"
           - name: DatabaseUser
@@ -25,10 +27,8 @@ spec:
           - name: DatabasePassword
             valueFrom:
               secretKeyRef:
-                name: secrets
-                key: SA_PASSWORD 
-          - name: DatabaseName
-            value: "service-a"            
+                name: architecture-demo-secrets
+                key: SA_PASSWORD           
         resources:
           limits:
             memory: "128Mi"
@@ -39,12 +39,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-a
+  name: customer-api-service
   namespace: architecture-demo
 spec:
   type: ClusterIP
   selector:
-    app: service-a-pod
+    app: customer-api-pod
   ports:
-  - port: 80
+  - protocol: TCP
+    port: 80
     targetPort: 80
