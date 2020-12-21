@@ -68,7 +68,10 @@ docker rmi architecture_demo/customer-api:v1
 
 ### Deployment to Azure
 
-TODO
+https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-app
 
-#### Clean
+1. Create Azure container registery (ACR) and add images to registery
+3. Create Azure kubernetes service (AKS) with service principle
+4. Login to AKS and add ingress with Helm and other resources
+
 

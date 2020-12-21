@@ -12,15 +12,11 @@ spec:
   rules:
   - http:
       paths:
-      - backend:
+      - path: /customer(/|$)(.*)
+        backend:
           serviceName: customer-api-service
           servicePort: 80
-        path: /a(/|$)(.*)
-      - backend:
+      - path: /order(/|$)(.*)
+        backend:
           serviceName: order-api-service
           servicePort: 80
-        path: /b(/|$)(.*)
-      - backend:
-          serviceName: customer-api-service
-          servicePort: 80
-        path: /(.*)
