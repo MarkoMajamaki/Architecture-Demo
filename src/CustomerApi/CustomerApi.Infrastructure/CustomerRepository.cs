@@ -1,5 +1,4 @@
 using CustomerApi.Domain;
-using CustomerApi.Infrastructure;
 
 namespace CustomerApi.Infrastructure
 {
@@ -7,7 +6,6 @@ namespace CustomerApi.Infrastructure
     {
         public CustomerRepository(CustomerContext customerContext) : base(customerContext)
         {
-            
         }
     }
 }

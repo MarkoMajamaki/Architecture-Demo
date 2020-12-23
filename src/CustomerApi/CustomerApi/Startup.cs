@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using AutoMapper;
 using CustomerApi.Application;
 using CustomerApi.Domain;
 using CustomerApi.Infrastructure;
@@ -32,7 +33,9 @@ namespace CustomerApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
             services.AddControllers();
+            services.AddAutoMapper(typeof(Startup));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomerApi", Version = "v1" });
@@ -53,6 +56,10 @@ namespace CustomerApi
 
             services.AddScoped(typeof(ICustomerRepository), typeof(CustomerRepository));
             services.AddScoped(typeof(ICreateCustomerCommandHandler), typeof(CreateCustomerCommandHandler));
+            services.AddScoped(typeof(IUpdateCustomerCommandHandler), typeof(UpdateCustomerCommandHandler));
+            services.AddScoped<ICustomerUpdateSender, CustomerUpdateSender>();  
+
+            services.Configure<RabbitMqConfiguration>(Configuration.GetSection("RabbitMq"));  
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

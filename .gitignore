@@ -16,3 +16,4 @@ src/OrderApi/OrderApi.Infrastructure/obj
 src/OrderApi/OrderApi.Messaging/obj
 src/OrderApi/OrderApi/bin
 src/OrderApi/OrderApi/obj
+src/CustomerApi/CustomerApi.Messaging/bin

@@ -1,24 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using CustomerApi.Domain;
-
-namespace CustomerApi.Infrastructure
+using OrderApi.Domain;
+namespace OrderApi.Infrastructure
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, new()
     {
-        protected readonly CustomerContext _customerContext;
+        protected readonly OrderContext _orderContext;
 
-        public Repository(CustomerContext customerContext)
+        public Repository(OrderContext orderContext)
         {
-            _customerContext = customerContext;
+            _orderContext = orderContext;
         }
 
         public IEnumerable<TEntity> GetAll()
         {
             try
             {
-                return _customerContext.Set<TEntity>();
+                return _orderContext.Set<TEntity>();
             }
             catch (Exception ex)
             {
@@ -30,7 +30,7 @@ namespace CustomerApi.Infrastructure
         {
             try
             {
-                return await _customerContext.FindAsync<TEntity>(id);
+                return await _orderContext.FindAsync<TEntity>(id);
             }
             catch (Exception ex)
             {
@@ -47,8 +47,8 @@ namespace CustomerApi.Infrastructure
 
             try
             {
-                await _customerContext.AddAsync(entity);
-                await _customerContext.SaveChangesAsync();
+                await _orderContext.AddAsync(entity);
+                await _orderContext.SaveChangesAsync();
 
                 return entity;
             }
@@ -67,8 +67,8 @@ namespace CustomerApi.Infrastructure
 
             try
             {
-                _customerContext.Update(entity);
-                await _customerContext.SaveChangesAsync();
+                _orderContext.Update(entity);
+                await _orderContext.SaveChangesAsync();
 
                 return entity;
             }
@@ -87,8 +87,8 @@ namespace CustomerApi.Infrastructure
 
             try
             {
-                _customerContext.Remove<TEntity>(entity);
-                await _customerContext.SaveChangesAsync();
+                _orderContext.Remove<TEntity>(entity);
+                await _orderContext.SaveChangesAsync();
 
                 return entity;
             }

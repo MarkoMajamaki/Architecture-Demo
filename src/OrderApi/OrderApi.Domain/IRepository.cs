@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CustomerApi.Domain
+namespace OrderApi.Domain
 {
     public interface IRepository<TEntity> where TEntity : class, new()
     {

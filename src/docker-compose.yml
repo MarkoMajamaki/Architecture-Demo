@@ -1,6 +1,15 @@
 version: '3.7'
 
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password        
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:latest
@@ -9,7 +18,9 @@ services:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "mssQlp4ssword#"
     ports:
-      - "1433:1433"  
+      - "1433:1433"
+    depends_on:
+      - rabbitmq
 
   orderapi:
     image: architecture_demo/order-api:v1
@@ -19,6 +30,7 @@ services:
       dockerfile: Dockerfile
     depends_on: 
       - sqlserver
+      - rabbitmq
     environment: 
       DatabaseServer: "sqlserver"
       DatabasePort: "1433"
@@ -36,6 +48,7 @@ services:
       dockerfile: Dockerfile
     depends_on: 
       - sqlserver
+      - rabbitmq
     environment: 
       DatabaseServer: "sqlserver"
       DatabasePort: "1433"
