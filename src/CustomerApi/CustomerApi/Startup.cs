@@ -4,9 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
-using CustomerApi.Application;
-using CustomerApi.Domain;
-using CustomerApi.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +15,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+
+using CustomerApi.Application;
+using CustomerApi.Domain;
+using CustomerApi.Infrastructure;
 
 namespace CustomerApi
 {
@@ -41,8 +42,6 @@ namespace CustomerApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomerApi", Version = "v1" });
             });
 
-            services.AddMediatR(Assembly.GetExecutingAssembly());
-
             string server = Configuration["DatabaseServer"] ?? "localhost";
             string port = Configuration["DatabasePort"] ?? "1433";
             string user = Configuration["DatabaseUser"] ?? "sa";
@@ -54,12 +53,15 @@ namespace CustomerApi
             // For Entity Framework  
             services.AddDbContext<CustomerContext>(options => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("CustomerApi.Infrastructure")));
 
-            services.AddScoped(typeof(ICustomerRepository), typeof(CustomerRepository));
-            services.AddScoped(typeof(ICreateCustomerCommandHandler), typeof(CreateCustomerCommandHandler));
-            services.AddScoped(typeof(IUpdateCustomerCommandHandler), typeof(UpdateCustomerCommandHandler));
-            services.AddScoped<ICustomerUpdateSender, CustomerUpdateSender>();  
-
             services.Configure<RabbitMqConfiguration>(Configuration.GetSection("RabbitMq"));  
+
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
+
+            services.AddSingleton<ICustomerUpdateSender, CustomerUpdateSender>();  
+            services.AddTransient<IRequestHandler<UpdateCustomerCommand, Customer>, UpdateCustomerCommandHandler>();
+            services.AddTransient<IRequestHandler<CreateCustomerCommand, Customer>, CreateCustomerCommandHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

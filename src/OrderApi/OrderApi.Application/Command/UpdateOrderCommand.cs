@@ -15,9 +15,7 @@ namespace OrderApi.Application
         }
     }
 
-    public interface IUpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Order> {}
-    
-    public class UpdateOrderCommandHandler : IUpdateOrderCommandHandler
+    public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Order>
     {
         private readonly IOrderRepository _repository;
 

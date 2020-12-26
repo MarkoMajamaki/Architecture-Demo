@@ -10,9 +10,7 @@ namespace OrderApi.Application
     {   
     }
 
-    interface IGetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, IEnumerable<Order>> {}
-
-    public class GetOrdersQueryHandler : IGetOrdersQueryHandler
+    public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, IEnumerable<Order>>
     {
         private readonly IOrderRepository _repository;
         public GetOrdersQueryHandler(IOrderRepository repository)

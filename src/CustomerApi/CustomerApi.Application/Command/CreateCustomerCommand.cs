@@ -15,9 +15,7 @@ namespace CustomerApi.Application
         }
     }
 
-    public interface ICreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, Customer> {}
-
-    public class CreateCustomerCommandHandler : ICreateCustomerCommandHandler
+    public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, Customer>
     {
         private readonly ICustomerRepository _repository;
         private readonly ICustomerUpdateSender _customerUpdateSender;

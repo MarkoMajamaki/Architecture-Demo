@@ -30,7 +30,7 @@ namespace CustomerApi
         {
             try
             {
-                await _mediator.Send(new CreateCustomerCommand(_mapper.Map<Customer>(customer)), new CancellationToken());
+                await _mediator.Send(new CreateCustomerCommand(_mapper.Map<Customer>(customer)));
                 return Ok();
             }
             catch (Exception ex)

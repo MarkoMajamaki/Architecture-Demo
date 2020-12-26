@@ -27,10 +27,17 @@ docker build -t architecture_demo/customer-api:v1 src/CustomerApi/
 # Pull MS SQL Server image
 docker pull mcr.microsoft.com/mssql/server:latest
 
+# Pull RabbitMq image
+docker pull rabbitmq:3-management
+
 # Add docker images to minikube cache
 minikube cache add architecture_demo/order-api:v1
 minikube cache add architecture_demo/customer-api:v1
 minikube cache add mcr.microsoft.com/mssql/server:latest
+minikube cache add rabbitmq:3-management
+
+# Reload cache
+minikube cache reload
 
 # Check cache
 minikube cache list
@@ -38,13 +45,15 @@ minikube cache list
 # Deploy all kubernetes resources
 kubectl apply -f kubernetes/dev/namespace.yaml 
 kubectl apply -f kubernetes/dev/secrets.yaml 
+kubectl apply -f kubernetes/dev/rabbitmq-deployment.yaml 
 kubectl apply -f kubernetes/dev/sqlserver-deployment.yaml 
 kubectl apply -f kubernetes/dev/order-api-deployment.yaml
 kubectl apply -f kubernetes/dev/customer-api-deployment.yaml
 kubectl apply -f kubernetes/dev/ingress.yaml
 
 # Check connection
-curl architecture-demo.info/order/test/testing
+curl architecture-demo.info/order/test/test
+curl architecture-demo.info/customer/test/test
 ```
 
 #### Clean
@@ -57,6 +66,7 @@ minikube cache delete architecture_demo/customer-api:v1
 # Delete all resources from minikube
 kubectl delete all --all -n architecture-demo
 kubectl delete ingress ingress -n architecture-demo
+kubectl delete statefulset rabbitmq -n architecture-demo
 kubectl delete pvc sqlserver-pvc -n architecture-demo
 kubectl delete secret architecture-demo-secrets -n architecture-demo
 kubectl delete namespace architecture-demo

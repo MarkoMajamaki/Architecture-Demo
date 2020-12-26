@@ -16,9 +16,7 @@ namespace OrderApi.Application
         }
     }
 
-    public interface IGetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, Order> {}
-
-    public class GetOrderByIdQueryHandler : IGetOrderByIdQueryHandler
+    public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, Order>
     {
         private readonly IOrderRepository _repository;
         public GetOrderByIdQueryHandler(IOrderRepository repository)

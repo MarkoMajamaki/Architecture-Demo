@@ -15,9 +15,7 @@ namespace OrderApi.Application
         }
     }
 
-    public interface ICreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Order> {}
-
-    public class CreateOrderCommandHandler : ICreateOrderCommandHandler
+    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Order>
     {
         private readonly IOrderRepository _repository;
         public CreateOrderCommandHandler(IOrderRepository repository)

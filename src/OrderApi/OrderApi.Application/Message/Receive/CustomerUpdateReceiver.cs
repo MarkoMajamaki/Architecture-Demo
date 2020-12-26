@@ -1,3 +1,5 @@
+
+
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,23 +41,21 @@ namespace OrderApi.Application
             stoppingToken.ThrowIfCancellationRequested();
 
             var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += /*async*/ (object sender, BasicDeliverEventArgs ea) =>
+            consumer.Received += async (object sender, BasicDeliverEventArgs ea) =>
             {
-                /*
-                var content = Encoding.UTF8.GetString(ea.Body);
+                var content = Encoding.UTF8.GetString(ea.Body.ToArray());
                 var updateCustomerModel = JsonConvert.DeserializeObject<UpdateCustomerModel>(content);
 
-                var order = await _mediator.Send(new GetOrderByIdQuery(updateCustomerModel.Id));
-
-                order.CustomerFullName = updateCustomerModel.
-                await _mediator.Send(new UpdateOrderCommand(), new CancellationToken());
-                */
+                string name = updateCustomerModel.FirstName + " " + updateCustomerModel.LastName;
+                var order = await _mediator.Send(new UpdateCustomerNameCommand(updateCustomerModel.Id, name));
+                
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
 
             _channel.BasicConsume(_rabbitMqConfiguration.QueueName, false, consumer);
 
-            return Task.CompletedTask;        }
+            return Task.CompletedTask;        
+        }
 
         private void InitializeRabbitMqListener()
         {
