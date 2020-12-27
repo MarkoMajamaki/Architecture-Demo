@@ -1,0 +1,59 @@
+version: '3.7'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest        
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "mssQlp4ssword#"
+    ports:
+      - "1433:1433"
+    depends_on:
+      - rabbitmq
+
+  orderapi:
+    image: architecture_demo/order-api:v1
+    container_name: orderapi
+    build:
+      context: ../backend/OrderApi
+      dockerfile: Dockerfile
+    depends_on: 
+      - sqlserver
+      - rabbitmq
+    environment: 
+      DatabaseServer: "sqlserver"
+      DatabasePort: "1433"
+      DatabaseUser: "sa"
+      DatabasePassword: "mssQlp4ssword#"
+      DatabaseName: "order"
+    ports:
+      - "8001:80"
+
+  customerapi:
+    image: architecture_demo/customer-api:v1
+    container_name: customerapi
+    build:
+      context: ../backend/CustomerApi
+      dockerfile: Dockerfile
+    depends_on: 
+      - sqlserver
+      - rabbitmq
+    environment: 
+      DatabaseServer: "sqlserver"
+      DatabasePort: "1433"
+      DatabaseUser: "sa"
+      DatabasePassword: "mssQlp4ssword#"
+      DatabaseName: "customer"
+    ports:
+      - "8002:80"

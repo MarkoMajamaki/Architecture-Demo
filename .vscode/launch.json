@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/CustomerApi/CustomerApi/bin/Debug/net5.0/CustomerApi.dll",
+            "program": "${workspaceFolder}/backend/CustomerApi/CustomerApi/bin/Debug/net5.0/CustomerApi.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/CustomerApi/CustomerApi",
+            "cwd": "${workspaceFolder}/backend/CustomerApi/CustomerApi",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -32,9 +32,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/OrderApi/OrderApi/bin/Debug/net5.0/OrderApi.dll",
+            "program": "${workspaceFolder}/backend/OrderApi/OrderApi/bin/Debug/net5.0/OrderApi.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/OrderApi/OrderApi",
+            "cwd": "${workspaceFolder}/backend/OrderApi/OrderApi",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -49,10 +49,10 @@
             }
         },
         {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
+            "name": "Frontend",
+            "type": "dart",
+            "request": "launch",
+            "program": "frontend/lib/main.dart"
         }
     ]
 }

@@ -21,8 +21,8 @@ echo "$(minikube ip) architecture-demo.info" | sudo tee -a /etc/hosts
 cat /etc/hosts
 
 # Navigate to root folder and build docker images
-docker build -t architecture_demo/order-api:v1 src/OrderApi/
-docker build -t architecture_demo/customer-api:v1 src/CustomerApi/
+docker build -t architecture_demo/order-api:v1 backend/OrderApi/
+docker build -t architecture_demo/customer-api:v1 backend/CustomerApi/
 
 # Pull MS SQL Server image
 docker pull mcr.microsoft.com/mssql/server:latest
@@ -43,13 +43,13 @@ minikube cache reload
 minikube cache list
 
 # Deploy all kubernetes resources
-kubectl apply -f kubernetes/dev/namespace.yaml 
-kubectl apply -f kubernetes/dev/secrets.yaml 
-kubectl apply -f kubernetes/dev/rabbitmq-deployment.yaml 
-kubectl apply -f kubernetes/dev/sqlserver-deployment.yaml 
-kubectl apply -f kubernetes/dev/order-api-deployment.yaml
-kubectl apply -f kubernetes/dev/customer-api-deployment.yaml
-kubectl apply -f kubernetes/dev/ingress.yaml
+kubectl apply -f deployment/minikube/namespace.yaml 
+kubectl apply -f deployment/minikube/secrets.yaml 
+kubectl apply -f deployment/minikube/rabbitmq-deployment.yaml 
+kubectl apply -f deployment/minikube/sqlserver-deployment.yaml 
+kubectl apply -f deployment/minikube/order-api-deployment.yaml
+kubectl apply -f deployment/minikube/customer-api-deployment.yaml
+kubectl apply -f deployment/minikube/ingress.yaml
 
 # Check connection
 curl architecture-demo.info/order/test/test
