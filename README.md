@@ -70,6 +70,9 @@ kubectl delete statefulset rabbitmq -n architecture-demo
 kubectl delete pvc sqlserver-pvc -n architecture-demo
 kubectl delete secret architecture-demo-secrets -n architecture-demo
 kubectl delete namespace architecture-demo
+kubectl delete all --all -n rabbitmq
+kubectl delete namespace rabbitmq
+
 
 # Delete docker image
 docker rmi architecture_demo/order-api:v1
