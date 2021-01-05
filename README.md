@@ -2,7 +2,23 @@
 
 This is ASP.NET Kubernetes demo for training and learning.
 
-### Deployment to minikube
+### Deployment with docker-compose
+
+```bash
+# Start Docker and run following command in deployment folder
+docker-compose up
+
+# Clean deployment with command
+docker-compose down
+
+# Delete docker image
+docker rmi architecture_demo/order-api:v1
+docker rmi architecture_demo/customer-api:v1
+docker rmi architecture_demo/frontend:v1
+docker rmi architecture_demo/nginx:v1
+```
+
+### Deployment with Minikube
 
 ```bash
 # Start minikube
@@ -20,27 +36,19 @@ echo "$(minikube ip) architecture-demo.info" | sudo tee -a /etc/hosts
 # Check is DNS added at the end of the file
 cat /etc/hosts
 
+# Switch off your own local Docker desktop installation and run command
+eval $(minikube docker-env)
+
 # Navigate to root folder and build docker images
 docker build -t architecture_demo/order-api:v1 backend/OrderApi/
 docker build -t architecture_demo/customer-api:v1 backend/CustomerApi/
+docker build -t architecture_demo/frontend:v1 frontend/
 
 # Pull MS SQL Server image
 docker pull mcr.microsoft.com/mssql/server:latest
 
 # Pull RabbitMq image
 docker pull rabbitmq:3-management
-
-# Add docker images to minikube cache
-minikube cache add architecture_demo/order-api:v1
-minikube cache add architecture_demo/customer-api:v1
-minikube cache add mcr.microsoft.com/mssql/server:latest
-minikube cache add rabbitmq:3-management
-
-# Reload cache
-minikube cache reload
-
-# Check cache
-minikube cache list
 
 # Deploy all kubernetes resources
 kubectl apply -f deployment/minikube/namespace.yaml 
@@ -49,19 +57,17 @@ kubectl apply -f deployment/minikube/rabbitmq-deployment.yaml
 kubectl apply -f deployment/minikube/sqlserver-deployment.yaml 
 kubectl apply -f deployment/minikube/order-api-deployment.yaml
 kubectl apply -f deployment/minikube/customer-api-deployment.yaml
+kubectl apply -f deployment/minikube/frontend-deployment.yaml
 kubectl apply -f deployment/minikube/ingress.yaml
 
 # Check connection
-curl architecture-demo.info/order/test/test
-curl architecture-demo.info/customer/test/test
+curl architecture-demo.info/order-api/test/test
+curl architecture-demo.info/customer-api/test/test
 ```
 
 #### Clean
 
 ```bash
-# Delete docker images from minikube cache
-minikube cache delete architecture_demo/order-api:v1
-minikube cache delete architecture_demo/customer-api:v1
 
 # Delete all resources from minikube
 kubectl delete all --all -n architecture-demo
@@ -73,10 +79,10 @@ kubectl delete namespace architecture-demo
 kubectl delete all --all -n rabbitmq
 kubectl delete namespace rabbitmq
 
-
 # Delete docker image
 docker rmi architecture_demo/order-api:v1
 docker rmi architecture_demo/customer-api:v1
+docker rmi architecture_demo/frontend:v1
 ```
 
 ### Deployment to Azure
@@ -87,4 +93,16 @@ https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-app
 3. Create Azure kubernetes service (AKS) with service principle
 4. Login to AKS and add ingress with Helm and other resources
 
+### Development with Bridge to Kubernetes
 
+```bash
+# Set context to minikube namespace architecture-demo
+kubectl config set-context --current --namespace=architecture-demo
+
+# Check context
+kubectl config get-contexts
+```
+
+Follow instructions from here: https://code.visualstudio.com/docs/containers/minikube
+
+Flutter frontend debugging is not working!
