@@ -62,6 +62,7 @@ namespace CustomerApi
             services.AddSingleton<ICustomerUpdateSender, CustomerUpdateSender>();  
             services.AddTransient<IRequestHandler<UpdateCustomerCommand, Customer>, UpdateCustomerCommandHandler>();
             services.AddTransient<IRequestHandler<CreateCustomerCommand, Customer>, CreateCustomerCommandHandler>();
+            services.AddTransient<IRequestHandler<GetCustomersQuery, IEnumerable<Customer>>, GetCustomersQueryHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

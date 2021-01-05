@@ -6,6 +6,7 @@ using AutoMapper;
 using MediatR;
 using CustomerApi.Application;
 using CustomerApi.Domain;
+using System.Collections.Generic;
 
 namespace CustomerApi
 {
@@ -20,6 +21,23 @@ namespace CustomerApi
         {
             _mediator = mediator;
             _mapper = mapper;
+        }
+
+        /// <summary>
+        /// Get all customers
+        /// </summary>
+        [HttpGet("Customers")]
+        public async Task<ActionResult> Customers()
+        {
+            try
+            {
+                IEnumerable<Customer> customers = await _mediator.Send(new GetCustomersQuery());
+                return Ok(customers);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
