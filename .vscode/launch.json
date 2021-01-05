@@ -4,55 +4,68 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
-        {
-            "name": "CustomerApi",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/backend/CustomerApi/CustomerApi/bin/Debug/net5.0/CustomerApi.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/backend/CustomerApi/CustomerApi",
-            "stopAtEntry": false,
-            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
+    {
+        "name": "CustomerApi with Kubernetes",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "bridge-to-kubernetes.compound",
+        "program": "${workspaceFolder}/backend/CustomerApi/CustomerApi/bin/Debug/net5.0/CustomerApi.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/backend/CustomerApi/CustomerApi",
+        "stopAtEntry": false,
+        "env": {
+            "ASPNETCORE_ENVIRONMENT": "Development",
+            "ASPNETCORE_URLS": "http://+:80"
         },
-        {
-            "name": "OrderApi",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/backend/OrderApi/OrderApi/bin/Debug/net5.0/OrderApi.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/backend/OrderApi/OrderApi",
-            "stopAtEntry": false,
-            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
-        },
-        {
-            "name": "Frontend",
-            "type": "dart",
-            "request": "launch",
-            "program": "frontend/lib/main.dart"
+        "sourceFileMap": {
+            "/Views": "${workspaceFolder}/Views"
         }
-    ]
+    },
+    {
+        "name": "CustomerApi",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/backend/CustomerApi/CustomerApi/bin/Debug/net5.0/CustomerApi.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/backend/CustomerApi/CustomerApi",
+        "stopAtEntry": false,
+        "serverReadyAction": {
+            "action": "openExternally",
+            "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+        },
+        "env": {
+            "ASPNETCORE_ENVIRONMENT": "Development"
+        },
+        "sourceFileMap": {
+            "/Views": "${workspaceFolder}/Views"
+        }
+    },
+    {
+        "name": "OrderApi",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/backend/OrderApi/OrderApi/bin/Debug/net5.0/OrderApi.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/backend/OrderApi/OrderApi",
+        "stopAtEntry": false,
+        "serverReadyAction": {
+            "action": "openExternally",
+            "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+        },
+        "env": {
+            "ASPNETCORE_ENVIRONMENT": "Development"
+        },
+        "sourceFileMap": {
+            "/Views": "${workspaceFolder}/Views"
+        }
+    },
+    {
+        "name": "Frontend",
+        "type": "dart",
+        "request": "launch",
+        "program": "frontend/lib/main.dart"
+    }
+]
 }
