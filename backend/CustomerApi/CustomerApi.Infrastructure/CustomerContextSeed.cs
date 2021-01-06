@@ -31,6 +31,14 @@ namespace CustomerApi.Infrastructure
                     LastName = "Smith",
                     Birthday = new DateTime(1989, 11, 23),
                     Age = 30
+                },
+                new Customer
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = "Eve",
+                    LastName = "Smith",
+                    Birthday = new DateTime(1989, 11, 23),
+                    Age = 30
                 }
             };
         }

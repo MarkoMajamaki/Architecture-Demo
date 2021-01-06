@@ -12,7 +12,7 @@ namespace CustomerApi.Application
 
         public GetCustomerByIdQuery(Guid id)
         {
-            Id = Id;
+            Id = id;
         }
     }
 

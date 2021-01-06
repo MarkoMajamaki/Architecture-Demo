@@ -26,13 +26,30 @@ namespace CustomerApi
         /// <summary>
         /// Get all customers
         /// </summary>
-        [HttpGet("Customers")]
-        public async Task<ActionResult> Customers()
+        [HttpGet]
+        public async Task<ActionResult> Get()
         {
             try
             {
                 IEnumerable<Customer> customers = await _mediator.Send(new GetCustomersQuery());
                 return Ok(customers);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // <summary>
+        /// Get single customer by id
+        /// </summary>
+        [HttpGet("{id}")]
+        public async Task<ActionResult> Get(string id)
+        {
+            try
+            {
+                Customer customer = await _mediator.Send(new GetCustomerByIdQuery(new Guid(id)));
+                return Ok(customer);
             }
             catch (Exception ex)
             {
@@ -57,6 +74,9 @@ namespace CustomerApi
             }
         }
 
+        /// <summary>
+        /// Update customer
+        /// </summary>
         [HttpPut]
         public async Task<ActionResult> Customer([FromBody]UpdateCustomerModel customerToUpdate)
         {
