@@ -6,6 +6,10 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
+  tls:
+  - secretName: architecture-demo-tls
+    hosts:
+      - "architecture-demo.info"
   rules:
     - host: architecture-demo.info
       http:

@@ -39,6 +39,9 @@ cat /etc/hosts
 # Switch off your own local Docker desktop installation and run command
 eval $(minikube docker-env)
 
+# Add sertificate
+kubectl create secret tls architecture-demo-tls --cert=deployment/minikube/tls.crt --key=deployment/minikube/tls.key -n architecture-demo
+
 # Navigate to root folder and build docker images
 docker build -t architecture_demo/order-api:v1 backend/OrderApi/
 docker build -t architecture_demo/customer-api:v1 backend/CustomerApi/
@@ -61,8 +64,9 @@ kubectl apply -f deployment/minikube/frontend-deployment.yaml
 kubectl apply -f deployment/minikube/ingress.yaml
 
 # Check connection
-curl architecture-demo.info/order-api/test/test
-curl architecture-demo.info/customer-api/test/test
+curl -k https://architecture-demo.info/order-api/test/test
+curl -k https://architecture-demo.info/customer-api/test/test
+curl -k https://architecture-demo.info/customer-api/customer
 ```
 
 #### Clean
