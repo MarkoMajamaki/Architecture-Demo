@@ -1,4 +1,5 @@
 // Service locator instance
+import 'package:frontend/services/customers_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:frontend/services/navigation_service.dart';
 import 'package:frontend/viewmodels/customer_viewmodel.dart';
@@ -19,6 +20,7 @@ void setupServiceLocator() {
   // Services
   serviceLocator.registerLazySingleton(() => MainTabNavigationService());
   serviceLocator.registerLazySingleton(() => NavigationService());
+  serviceLocator.registerLazySingleton(() => CustomerService());
 
   // View models
   serviceLocator.registerFactory<CustomerViewModel>(() => CustomerViewModel());
