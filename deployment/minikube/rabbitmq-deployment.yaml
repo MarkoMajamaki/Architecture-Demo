@@ -63,8 +63,6 @@ metadata:
   namespace: architecture-demo
 data:
   enabled_plugins: |
-      ## rabbitmq_management User interface and dashboard
-      ## rabbitmq_peer_discovery_k8s Make discovery mechanisms to work
       [rabbitmq_management,rabbitmq_peer_discovery_k8s].
   rabbitmq.conf: |
       ## Cluster formation. See https://www.rabbitmq.com/cluster-formation.html to learn more.
