@@ -1,6 +1,21 @@
 # Architecture demo for kubernetes ASP.NET project
 
-This is ASP.NET Kubernetes demo for training and learning.
+This is ASP.NET Kubernetes demo for training and learning. **Repo is still under heavy development and some features might not working!**
+
+Used technologies:
+* ASP.NET
+* Flutter
+* Docker
+* Kubernetes
+* Azure
+* Minikube
+* RabbitMq
+* SQL Server
+* Entity Framework
+* CQRS
+* MediatR
+* Swager
+* Clean architecture
 
 ### Deployment with docker-compose
 
@@ -51,7 +66,7 @@ docker build -t architecture_demo/frontend:v1 frontend/
 docker pull mcr.microsoft.com/mssql/server:latest
 
 # Pull RabbitMq image
-docker pull rabbitmq:3-management
+docker pull rabbitmq:3.8
 
 # Deploy all kubernetes resources
 kubectl apply -f deployment/minikube/namespace.yaml 
