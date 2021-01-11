@@ -61,7 +61,7 @@ namespace CustomerApi
         /// Add new customer
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult> Customer([FromBody]CreateCustomerModel customer)
+        public async Task<ActionResult> Post([FromBody]CreateCustomerModel customer)
         {
             try
             {
