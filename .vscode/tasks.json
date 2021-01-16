@@ -78,11 +78,11 @@
         {
             "label": "bridge-to-kubernetes.service",
             "type": "bridge-to-kubernetes.service",
-            "service": "customer-api-service",
+            "service": "order-api-service",
             "ports": [
                 80
             ],
-            "targetCluster": "minikube",
+            "targetCluster": "kind-architecture-demo-cluster",
             "targetNamespace": "architecture-demo"
         },
         {

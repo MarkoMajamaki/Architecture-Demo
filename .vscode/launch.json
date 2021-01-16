@@ -5,13 +5,13 @@
    "version": "0.2.0",
    "configurations": [
     {
-        "name": "CustomerApi with Kubernetes",
+        "name": "OrderApi with Kubernetes",
         "type": "coreclr",
         "request": "launch",
         "preLaunchTask": "bridge-to-kubernetes.compound",
-        "program": "${workspaceFolder}/backend/CustomerApi/CustomerApi/bin/Debug/net5.0/CustomerApi.dll",
+        "program": "${workspaceFolder}/backend/OrderApi/OrderApi/bin/Debug/net5.0/OrderApi.dll",
         "args": [],
-        "cwd": "${workspaceFolder}/backend/CustomerApi/CustomerApi",
+        "cwd": "${workspaceFolder}/backend/OrderApi/OrderApi",
         "stopAtEntry": false,
         "env": {
             "ASPNETCORE_ENVIRONMENT": "Development",

@@ -98,17 +98,17 @@ metadata:
   name: rabbitmq
   namespace: architecture-demo
 spec:
-  serviceName: rabbitmq-service
+  serviceName: rabbitmq
   # Three nodes is the recommended minimum. Some features may require a majority of nodes
   # to be available.
   replicas: 3
   selector:
     matchLabels:
-      app: rabbitmq-pod
+      app: rabbitmq
   template:
     metadata:
       labels:
-        app: rabbitmq-pod
+        app: rabbitmq
     spec:
       serviceAccountName: rabbitmq-service-account
       terminationGracePeriodSeconds: 10
@@ -117,7 +117,7 @@ spec:
         # Learn more at https://kubernetes.io/docs/reference/kubernetes-api/labels-annotations-taints/#kubernetes-io-os
         kubernetes.io/os: linux
       containers:
-      - name: rabbitmq-container
+      - name: rabbitmq
         image: rabbitmq:3.8
         volumeMounts:
           - name: config-volume
@@ -146,7 +146,7 @@ spec:
             value: "true"
           # See a note on cluster_formation.k8s.address_type in the config file section
           - name: K8S_SERVICE_NAME
-            value: rabbitmq-service
+            value: rabbitmq
           - name: RABBITMQ_NODENAME
             value: rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local
           - name: K8S_HOSTNAME_SUFFIX
@@ -169,10 +169,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rabbitmq-service
+  name: rabbitmq
   namespace: architecture-demo
   labels:
-    app: rabbitmq-pod
+    app: rabbitmq
     type: LoadBalancer
 spec:
   type: NodePort

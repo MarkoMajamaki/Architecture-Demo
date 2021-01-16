@@ -33,6 +33,38 @@ docker rmi architecture_demo/frontend:v1
 docker rmi architecture_demo/nginx:v1
 ```
 
+### Deployment with Kind
+
+```bash
+
+# Create clauster
+kind create cluster --name architecture-demo-cluster
+
+# Navigate to root folder and build docker images
+docker build -t architecture_demo/order-api:v1 backend/OrderApi/
+docker build -t architecture_demo/customer-api:v1 backend/CustomerApi/
+docker build -t architecture_demo/frontend:v1 frontend/
+
+# Load customer-api container to cluster
+kind load docker-image architecture_demo/customer-api:v1 --name architecture-demo-cluster
+
+# Load order-api container to cluster
+kind load docker-image architecture_demo/order-api:v1 --name architecture-demo-cluster
+
+# Do deployment
+kubectl apply -f deployment/kind/namespace.yaml 
+kubectl apply -f deployment/kind/rabbitmq-deployment.yaml 
+kubectl apply -f deployment/kind/secrets.yaml 
+kubectl apply -f deployment/kind/sqlserver-deployment.yaml 
+kubectl apply -f deployment/kind/customer-api-deployment.yaml
+kubectl apply -f deployment/kind/order-api-deployment.yaml
+kubectl apply -f deployment/kind/frontend-deployment.yaml
+kubectl apply -f deployment/kind/ingress.yaml
+
+# Check deployment
+kubectl get all -n architecture-demo
+```
+
 ### Deployment with Minikube
 
 ```bash
@@ -77,6 +109,10 @@ kubectl apply -f deployment/minikube/customer-api-deployment.yaml
 kubectl apply -f deployment/minikube/order-api-deployment.yaml
 kubectl apply -f deployment/minikube/frontend-deployment.yaml
 kubectl apply -f deployment/minikube/ingress.yaml
+
+# Open RabbitMq dashboard
+kubectl -n architecture-demo port-forward rabbitmq-0 8080:15672
+http://localhost:8080
 
 # Open RabbitMq first node
 kubectl exec -it rabbitmq-0 bash -n architecture-demo
@@ -127,6 +163,9 @@ kubectl config set-context --current --namespace=architecture-demo
 
 # Check context
 kubectl config get-contexts
+
+# Open port for debug. Remove comment from CustomerUpdateSend.cs
+kubectl -n architecture-demo port-forward rabbitmq-0 8001:5672
 ```
 
 Follow instructions from here: https://code.visualstudio.com/docs/containers/minikube

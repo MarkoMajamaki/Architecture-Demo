@@ -42,6 +42,8 @@ namespace OrderApi.Application
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += async (object sender, BasicDeliverEventArgs ea) =>
             {
+                Console.WriteLine("RabbitMq message received!");
+
                 var content = Encoding.UTF8.GetString(ea.Body.ToArray());
                 var updateCustomerModel = JsonConvert.DeserializeObject<UpdateCustomerModel>(content);
 
@@ -49,6 +51,8 @@ namespace OrderApi.Application
                 var order = await _mediator.Send(new UpdateCustomerNameCommand(updateCustomerModel.Id, name));
                 
                 _channel.BasicAck(ea.DeliveryTag, false);
+
+                Console.WriteLine("RabbitMq message receive handled!");
             };
 
             _channel.BasicConsume(_rabbitMqConfiguration.QueueName, false, consumer);

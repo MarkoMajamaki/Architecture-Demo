@@ -27,6 +27,8 @@ namespace CustomerApi.Application
 
         public void SendCustomer(Customer customer)
         {
+            Console.WriteLine("RabbitMq start sending message!");
+
             if (ConnectionExists())
             {
                 using (var channel = _connection.CreateModel())
@@ -39,21 +41,30 @@ namespace CustomerApi.Application
                     channel.BasicPublish(exchange: "", routingKey: _rabbitMqOptions.QueueName, basicProperties: null, body: body);
                 }
             }
+
+            Console.WriteLine("RabbitMq message send!");
         }
 
         private void CreateConnection()
         {
+            // Use this with kind
+            string connectionUrl = "amqp://" + _rabbitMqOptions.UserName + ":" + _rabbitMqOptions.Password + "@" + _rabbitMqOptions.HostName + ".svc.cluster.local:5672/";
+                        
+            // Use this with Bridge to Kubernetes after opening port with command:
+            // kubectl -n architecture-demo port-forward rabbitmq-0 8001:5672
+            // string connectionUrl = "amqp://guest:guest@localhost:8001/";
+
             try
             {
                 ConnectionFactory factory = new ConnectionFactory();
-                factory.Uri = new Uri("amqp://" + _rabbitMqOptions.UserName + ":" + _rabbitMqOptions.Password + "@" + _rabbitMqOptions.HostName + ".svc.cluster.local:5672/");
+                factory.Uri = new Uri(connectionUrl);
                 _connection = factory.CreateConnection();
 
                 Console.WriteLine("RabbitMq connection created");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"RabbitMq could not create connection: {ex.Message}");
+                Console.WriteLine($"RabbitMq could not create connection to uri: {connectionUrl}" + Environment.NewLine + "message: " + ex.Message);
             }
         }
 
