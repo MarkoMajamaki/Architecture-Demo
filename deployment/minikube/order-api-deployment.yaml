@@ -28,7 +28,17 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: architecture-demo-secrets
-                key: SA_PASSWORD            
+                key: SA_PASSWORD     
+          - name: RabbitMq__HostName 
+            value: "rabbitmq-0.rabbitmq-service.architecture-demo"
+          - name: RabbitMq__Port
+            value: "5672"
+          - name: RabbitMq__UserName
+            value: "guest"
+          - name: RabbitMq__Password
+            value: "guest"
+          - name: RabbitMq__QueueName 
+            value: "TestQueue"
         resources:
           limits:
             memory: "128Mi"

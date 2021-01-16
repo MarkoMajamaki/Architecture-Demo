@@ -70,13 +70,22 @@ docker pull rabbitmq:3.8
 
 # Deploy all kubernetes resources
 kubectl apply -f deployment/minikube/namespace.yaml 
-kubectl apply -f deployment/minikube/secrets.yaml 
 kubectl apply -f deployment/minikube/rabbitmq-deployment.yaml 
+kubectl apply -f deployment/minikube/secrets.yaml 
 kubectl apply -f deployment/minikube/sqlserver-deployment.yaml 
-kubectl apply -f deployment/minikube/order-api-deployment.yaml
 kubectl apply -f deployment/minikube/customer-api-deployment.yaml
+kubectl apply -f deployment/minikube/order-api-deployment.yaml
 kubectl apply -f deployment/minikube/frontend-deployment.yaml
 kubectl apply -f deployment/minikube/ingress.yaml
+
+# Open RabbitMq first node
+kubectl exec -it rabbitmq-0 bash -n architecture-demo
+
+# Mirror all Rabbitmq nodes
+rabbitmqctl set_policy ha-fed \
+    ".*" '{"federation-upstream-set":"all", "ha-sync-mode":"automatic", "ha-mode":"all" }' \
+    --priority 1 \
+    --apply-to queues
 
 # Check connection
 curl -k https://architecture-demo.info/order-api/test/test

@@ -16,19 +16,12 @@ namespace CustomerApi.Application
 
     public class CustomerUpdateSender : ICustomerUpdateSender
     {
-        private readonly string _hostname;
-        private readonly string _password;
-        private readonly string _queueName;
-        private readonly string _username;
+        private RabbitMqConfiguration _rabbitMqOptions;
         private IConnection _connection;
 
         public CustomerUpdateSender(IOptions<RabbitMqConfiguration> rabbitMqOptions)
         {
-            _queueName = rabbitMqOptions.Value.QueueName;
-            _hostname = rabbitMqOptions.Value.Hostname;
-            _username = rabbitMqOptions.Value.UserName;
-            _password = rabbitMqOptions.Value.Password;
-
+            _rabbitMqOptions = rabbitMqOptions.Value;
             CreateConnection();
         }
 
@@ -38,12 +31,12 @@ namespace CustomerApi.Application
             {
                 using (var channel = _connection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: _queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+                    channel.QueueDeclare(queue: _rabbitMqOptions.QueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
 
                     var json = JsonConvert.SerializeObject(customer);
                     var body = Encoding.UTF8.GetBytes(json);
 
-                    channel.BasicPublish(exchange: "", routingKey: _queueName, basicProperties: null, body: body);
+                    channel.BasicPublish(exchange: "", routingKey: _rabbitMqOptions.QueueName, basicProperties: null, body: body);
                 }
             }
         }
@@ -52,17 +45,15 @@ namespace CustomerApi.Application
         {
             try
             {
-                var factory = new ConnectionFactory
-                {
-                    HostName = _hostname,
-                    UserName = _username,
-                    Password = _password
-                };
+                ConnectionFactory factory = new ConnectionFactory();
+                factory.Uri = new Uri("amqp://" + _rabbitMqOptions.UserName + ":" + _rabbitMqOptions.Password + "@" + _rabbitMqOptions.HostName + ".svc.cluster.local:5672/");
                 _connection = factory.CreateConnection();
+
+                Console.WriteLine("RabbitMq connection created");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Could not create connection: {ex.Message}");
+                Console.WriteLine($"RabbitMq could not create connection: {ex.Message}");
             }
         }
 

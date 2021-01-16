@@ -1,5 +1,6 @@
 
 
+using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,9 +20,7 @@ namespace OrderApi.Application
         private IModel _channel;
         private readonly IMediator _mediator;
 
-        public CustomerUpdateReceiver(
-            IMediator mediator, 
-            IOptions<RabbitMqConfiguration> rabbitMqOptions)
+        public CustomerUpdateReceiver(IMediator mediator, IOptions<RabbitMqConfiguration> rabbitMqOptions)
         {
             _rabbitMqConfiguration = rabbitMqOptions.Value;
             _mediator = mediator;
@@ -59,14 +58,13 @@ namespace OrderApi.Application
 
         private void InitializeRabbitMqListener()
         {
-            var factory = new ConnectionFactory
-            {
-                HostName = _rabbitMqConfiguration.Hostname,
-                UserName = _rabbitMqConfiguration.UserName,
-                Password = _rabbitMqConfiguration.Password
-            };
+            ConnectionFactory factory = new ConnectionFactory();
+            factory.Uri = new Uri("amqp://" + _rabbitMqConfiguration.UserName + ":" + _rabbitMqConfiguration.Password + "@" + _rabbitMqConfiguration.HostName + ".svc.cluster.local:5672/");
 
             _connection = factory.CreateConnection();
+
+            Console.WriteLine("RabbitMq connection created");
+
             _channel = _connection.CreateModel();
             _channel.QueueDeclare(queue: _rabbitMqConfiguration.QueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
         } 
