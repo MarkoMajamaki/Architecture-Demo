@@ -1,3 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: architecture-demo-secrets
+  namespace: architecture-demo
+stringData:
+  SA_PASSWORD: mssQlp4ssword#
+---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

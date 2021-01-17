@@ -9,9 +9,9 @@ spec:
   tls:
   - secretName: ingress-tls-secret
     hosts:
-      - "architecture-demo.info"
+      - "localhost"
   rules:
-    - host: architecture-demo.info
+    - host: localhost
       http:
         paths:
           - path: /(.*)
@@ -34,4 +34,4 @@ spec:
               service:
                 name: order-api-service
                 port:
-                  number: 80                  
+                  number: 80                 

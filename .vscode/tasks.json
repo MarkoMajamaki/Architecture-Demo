@@ -78,7 +78,7 @@
         {
             "label": "bridge-to-kubernetes.service",
             "type": "bridge-to-kubernetes.service",
-            "service": "order-api-service",
+            "service": "customer-api-service",
             "ports": [
                 80
             ],

@@ -36,33 +36,56 @@ docker rmi architecture_demo/nginx:v1
 ### Deployment with Kind
 
 ```bash
-
-# Create clauster
-kind create cluster --name architecture-demo-cluster
-
 # Navigate to root folder and build docker images
 docker build -t architecture_demo/order-api:v1 backend/OrderApi/
 docker build -t architecture_demo/customer-api:v1 backend/CustomerApi/
 docker build -t architecture_demo/frontend:v1 frontend/
 
-# Load customer-api container to cluster
-kind load docker-image architecture_demo/customer-api:v1 --name architecture-demo-cluster
+# Pull images
+docker pull rabbitmq:3.8-management
+docker pull mcr.microsoft.com/mssql/server:latest
 
-# Load order-api container to cluster
+# Create cluster with config
+kind create cluster --name architecture-demo-cluster --config deployment/kind/kind.config
+
+# Load images to cluster
+kind load docker-image architecture_demo/customer-api:v1 --name architecture-demo-cluster
 kind load docker-image architecture_demo/order-api:v1 --name architecture-demo-cluster
+kind load docker-image rabbitmq:3.8-management --name architecture-demo-cluster
+kind load docker-image mcr.microsoft.com/mssql/server:latest --name architecture-demo-cluster
+
+# Create self signed sertificate
+openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout deployment/tls.key -out deployment/tls.crt -subj "/CN=architecture-demo.info" -days 365
+
+# Add namespace
+kubectl apply -f deployment/kind/namespace.yaml 
+
+# Add ingress sertificate
+kubectl create secret tls ingress-tls-secret --cert=deployment/tls.crt --key=deployment/tls.key -n architecture-demo
 
 # Do deployment
-kubectl apply -f deployment/kind/namespace.yaml 
 kubectl apply -f deployment/kind/rabbitmq-deployment.yaml 
-kubectl apply -f deployment/kind/secrets.yaml 
 kubectl apply -f deployment/kind/sqlserver-deployment.yaml 
 kubectl apply -f deployment/kind/customer-api-deployment.yaml
 kubectl apply -f deployment/kind/order-api-deployment.yaml
 kubectl apply -f deployment/kind/frontend-deployment.yaml
+
+# Deploy ingress controller
+kubectl apply --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=90s
+
+# Deploye ingress rules
 kubectl apply -f deployment/kind/ingress.yaml
 
-# Check deployment
-kubectl get all -n architecture-demo
+# Test connection
+curl -k https://localhost/customer-api/customer
+
+# Delete all
+kind delete cluster --name architecture-demo-cluster
 ```
 
 ### Deployment with Minikube
@@ -86,8 +109,11 @@ cat /etc/hosts
 # Switch off your own local Docker desktop installation and run command
 eval $(minikube docker-env)
 
+# Create self signed sertificate
+openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout deployment/tls.key -out deployment/tls.crt -subj "/CN=architecture-demo.info" -days 365
+
 # Add sertificate
-kubectl create secret tls architecture-demo-tls --cert=deployment/minikube/tls.crt --key=deployment/minikube/tls.key -n architecture-demo
+kubectl create secret tls ingress-tls-secret --cert=deployment/tls.crt --key=deployment/tls.key -n architecture-demo
 
 # Navigate to root folder and build docker images
 docker build -t architecture_demo/order-api:v1 backend/OrderApi/
@@ -103,7 +129,6 @@ docker pull rabbitmq:3.8
 # Deploy all kubernetes resources
 kubectl apply -f deployment/minikube/namespace.yaml 
 kubectl apply -f deployment/minikube/rabbitmq-deployment.yaml 
-kubectl apply -f deployment/minikube/secrets.yaml 
 kubectl apply -f deployment/minikube/sqlserver-deployment.yaml 
 kubectl apply -f deployment/minikube/customer-api-deployment.yaml
 kubectl apply -f deployment/minikube/order-api-deployment.yaml
@@ -127,11 +152,6 @@ rabbitmqctl set_policy ha-fed \
 curl -k https://architecture-demo.info/order-api/test/test
 curl -k https://architecture-demo.info/customer-api/test/test
 curl -k https://architecture-demo.info/customer-api/customer
-```
-
-#### Clean
-
-```bash
 
 # Delete all resources from minikube
 kubectl delete all --all -n architecture-demo
