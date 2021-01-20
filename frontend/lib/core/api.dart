@@ -1,3 +1,5 @@
+import 'dart:io';
+
 enum Enviroments { Production, Development }
 
 class API {
@@ -21,7 +23,15 @@ class API {
   ///
   static String get baseUrl {
     if (enviroment == Enviroments.Development) {
-      return "https://architecture-demo.info"; // minikube
+      // Minikube
+      /*if (Platform.isAndroid) {
+        return "192.168.64.7";
+      } else {
+        return "https://architecture-demo.info";
+      }*/
+
+      // Kind
+      return "https://localhost";
     } else {
       throw new Exception();
     }
