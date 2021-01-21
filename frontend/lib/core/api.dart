@@ -31,7 +31,11 @@ class API {
       }*/
 
       // Kind
-      return "https://localhost";
+      if (Platform.isAndroid) {
+        return "127.0.0.1";
+      } else {
+        return "https://localhost";
+      }
     } else {
       throw new Exception();
     }
