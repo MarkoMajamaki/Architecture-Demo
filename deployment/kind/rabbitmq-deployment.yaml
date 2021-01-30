@@ -1,3 +1,8 @@
+#
+# Example RabbitMQ deployment. If this used, then use hostname rabbitmq-0.rabbitmq-headless.architecture-demo
+# in other services to access RabbitMQ. In this demo we use Bitnami Helm chart instead.
+#
+
 apiVersion: v1
 kind: ConfigMap
 metadata:

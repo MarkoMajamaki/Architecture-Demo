@@ -6,18 +6,6 @@ metadata:
 stringData:
   SA_PASSWORD: mssQlp4ssword#
 ---
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: sqlserver-pvc
-  namespace: architecture-demo
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata: 

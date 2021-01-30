@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: customer-api-deployment
+  name: order-api-deployment
   namespace: architecture-demo
 spec:
   selector:
     matchLabels:
-      app: customer-api-pod
+      app: order-api-pod
   template:
     metadata:
       labels:
-        app: customer-api-pod
+        app: order-api-pod
     spec:
       containers:
-      - name: customer-api-container
-        image: architecture_demo/customer-api:v1
+      - name: order-api-container
+        image: architecture_demo/order-api:v1
         env:
           - name: DatabaseServer
             value: "sqlserver-service"
           - name: DatabaseName
-            value: "customer-db"
+            value: "order-db" 
           - name: DatabasePort
             value: "1433"
           - name: DatabaseUser
@@ -30,7 +30,7 @@ spec:
                 name: architecture-demo-secrets
                 key: SA_PASSWORD     
           - name: RabbitMq__HostName 
-            value: "rabbitmq-0.rabbitmq.architecture-demo"
+            value: "rabbitmq.architecture-demo"
           - name: RabbitMq__Port
             value: "5672"
           - name: RabbitMq__UserName
@@ -49,12 +49,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: customer-api-service
+  name: order-api-service
   namespace: architecture-demo
 spec:
   type: ClusterIP
   selector:
-    app: customer-api-pod
+    app: order-api-pod
   ports:
   - protocol: TCP
     port: 80

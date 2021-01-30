@@ -1,17 +1,4 @@
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: sqlserver-pvc
-  namespace: architecture-demo
-  annotations:
-    volume.beta.kubernetes.io/storage-class: azure-disk
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 8Gi
----
+
 apiVersion: apps/v1
 kind: Deployment
 metadata: 

@@ -1,19 +1,15 @@
-## 
-## https://github.com/rabbitmq/diy-kubernetes-examples/tree/master/minikube
-##
+#
+# Example RabbitMQ deployment. If this used, then use hostname rabbitmq-0.rabbitmq-headless.architecture-demo
+# in other services to access RabbitMQ. In this demo we use Bitnami Helm chart instead.
+#
+# Copy from: https://github.com/rabbitmq/diy-kubernetes-examples/tree/master/minikube
 
-# RabbitMq instances are running as a service account. We need to provide premissions
-# for these instances can make a call to Kubernetes API.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: rabbitmq-service-account
   namespace: architecture-demo
 ---
-# Kubernetes discovery plugin for RabbitMq requires access to API to discover another peers
-# on the network. To allow that we need to create role. With role we give access to get, list and 
-# watch endpoints. No plugin can pick endpoints running in the namespace and connect other RabbitMq
-# instances.
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -29,7 +25,6 @@ rules:
     - list
     - watch
 ---
-# Bind role to service account
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -44,8 +39,6 @@ roleRef:
   kind: Role
   name: rabbitmq-role
 ---
-# Nodes use Erlang cookie in communication. CLI must have same cookie with node. All nodes in
-# cluster must have same Erlang cookie. We create secret with that cookie.
 apiVersion: v1
 kind: Secret
 metadata:
