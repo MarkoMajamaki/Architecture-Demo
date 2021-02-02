@@ -38,9 +38,8 @@ make kind-deploy
 # Delete cluster
 make kind-destroy
 
-# To Access the RabbitMQ Management interface: (username: guest, password: guest)
-kubectl port-forward --namespace architecture-demo svc/rabbitmq 15672:15672
-http://127.0.0.1:15672/
+# Access the RabbitMQ Management interface: (username: guest, password: guest)
+kubectl port-forward --namespace architecture-demo svc/rabbitmq 15672:15672 && open http://127.0.0.1:15672/
 
 # Test connection
 curl -k https://localhost/customer-api/customer
@@ -54,29 +53,56 @@ curl -k https://localhost/customer-api/customer
 # Deploy to minikube
 make minikube-deploy
 
+# Destroy minikube
+make minikube-destroy
+
 # Open minikube dashboard for debugging
 minikube dashboard
 
 # Check connection
-curl -k https://architecture-demo.info/order-api/test/test
-curl -k https://architecture-demo.info/customer-api/test/test
 curl -k https://architecture-demo.info/customer-api/customer
 
-# Open RabbitMq dashboard
-kubectl -n architecture-demo port-forward rabbitmq-0 8080:15672
-http://localhost:8080
-
-# Destroy minikube
-make minikube-destroy
+# Access the RabbitMQ Management interface: (username: guest, password: guest)
+kubectl -n architecture-demo port-forward rabbitmq-0 8080:15672 && open http://localhost:8080
 ```
 
 ### Deployment to Azure
 
-https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-app
+```bash
+# Login to Azure
+az login
 
-1. Create Azure container registery (ACR) and add images to registery
-3. Create Azure kubernetes service (AKS) with service principle
-4. Login to AKS and add ingress with Helm and other resources
+# Save subscription details which you want to use
+TENANT_ID=<tenantId>
+SUBSCRIPTION_ID=<id>
+
+# Go Terraform folder to execute commands
+cd deployment/azure/terraform
+
+# Save Terraform input variables file name
+TF_VAR_FILE_NAME=terraform.tfvars
+
+# Create Terraform input variables for this Azure subscription to file
+sh create-input-variables.sh $SUBSCRIPTION_ID $TENANT_ID $TF_VAR_FILE_NAME
+
+# Init Terraform infrastructure
+terraform init
+
+# Do plan to create infrastructure
+terraform plan -var-file="$TF_VAR_FILE_NAME"
+
+# Create infrastructure and deploy
+terraform apply -var-file="$TF_VAR_FILE_NAME"
+
+# Destroy Azure infrastructure
+terraform destroy -var-file="$TF_VAR_FILE_NAME"
+
+# Check connection
+# TODO
+
+# Access the RabbitMQ Management interface: (username: guest, password: guest)
+# TODO
+```
 
 ### Development with Bridge to Kubernetes
 

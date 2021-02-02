@@ -108,15 +108,33 @@ minikube-destroy:
 	minikube delete
 
 #
-# Azure deployment
+# Azure deployment (NOT WORKING! USE SHELL SCRIPTS!)
 #
-azure-deploy:
+azure-deploy:	
+	$(MAKE) azure-deploy-init
+	$(MAKE) azure-terraform-init
+	$(MAKE) azure-terraform-action plan
+	$(MAKE) azure-terraform-action apply
 
 azure-destroy:
+	$(MAKE) azure-terraform-action destroy
+
+azure-init:
+ 	$(shell sh deployment/azure/init.sh $(SUBSCRIPTION_ID) $(TENANT_ID))
 
 azure-terraform-init:
+	cd deployment/azure/terraform && terraform init
 
-azure-terraform-plan:
+# File path for Terrafrorm variables
+TF_VAR_FILE_PATH:=terraform.tfvars
+
+# Default terraform action
+TF_ACTION?=plan
+
+azure-terraform-action:
+	cd deployment/azure/terraform && \
+	terraform $(TF_ACTION) -var-file="$(TF_VAR_FILE_PATH)" && \
+	cd ../../.. \
 
 #
 # Common
