@@ -72,30 +72,26 @@ kubectl -n architecture-demo port-forward rabbitmq-0 8080:15672 && open http://l
 # Login to Azure
 az login
 
-# Save subscription details which you want to use
-TENANT_ID=<tenantId>
-SUBSCRIPTION_ID=<id>
-
 # Go Terraform folder to execute commands
 cd deployment/azure/terraform
-
-# Save Terraform input variables file name
-TF_VAR_FILE_NAME=terraform.tfvars
-
-# Create Terraform input variables for this Azure subscription to file
-sh create-input-variables.sh $SUBSCRIPTION_ID $TENANT_ID $TF_VAR_FILE_NAME
 
 # Init Terraform infrastructure
 terraform init
 
 # Do plan to create infrastructure
-terraform plan -var-file="$TF_VAR_FILE_NAME"
+terraform plan
 
 # Create infrastructure and deploy
-terraform apply -var-file="$TF_VAR_FILE_NAME"
+terraform apply
 
 # Destroy Azure infrastructure
-terraform destroy -var-file="$TF_VAR_FILE_NAME"
+terraform destroy
+
+# Configure kubectl to connect to your Kubernetes cluster
+az aks get-credentials --resource-group architecture_demo_rg --name ArchitectureDemoAKS
+
+# Get nodes
+kubectl get nodes
 
 # Check connection
 # TODO

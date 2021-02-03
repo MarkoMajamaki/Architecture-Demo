@@ -16,6 +16,8 @@ backend/OrderApi/OrderApi.Infrastructure/obj
 backend/OrderApi/OrderApi.Messaging/obj
 backend/OrderApi/OrderApi/bin
 backend/OrderApi/OrderApi/obj
-deployment/azure/terraform/terraform.tfvars
-deployment/azure/terraform/.terraform*
-deployment/azure/terraform/.terraform.lock.hcl
+deployment/azure/terraform.tfvars
+deployment/azure/.terraform*
+deployment/azure/.terraform.lock.hcl
+deployment/azure/terraform.tfstate
+deployment/azure/terraform.tfstate.backup
