@@ -10,7 +10,11 @@ module "cluster" {
 }
 
 # Kubernetes deployment module 
-# module "k8s" {
-#   source                = "./k8s/"
-#   host                  = "${module.cluster.host}"
-# }
+module "k8s" {
+  source                = "./k8s/"
+  host                  = module.cluster.aks_host
+  acr_login_server      = module.cluster.acr_login_server
+  client_certificate    = base64decode(module.cluster.aks_client_certificate)
+  client_key            = base64decode(module.cluster.aks_client_key)
+  cluster_ca_certificate= base64decode(module.cluster.aks_cluster_ca_certificate)
+}

@@ -73,7 +73,13 @@ kubectl -n architecture-demo port-forward rabbitmq-0 8080:15672 && open http://l
 az login
 
 # Go Terraform folder to execute commands
-cd deployment/azure/terraform
+cd deployment/azure
+
+# Create TLS certificate
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -out ingress-tls.crt \
+    -keyout ingress-tls.key \
+    -subj "/CN=architecture-demo.info/O=ingress-tls"
 
 # Init Terraform infrastructure
 terraform init
@@ -84,21 +90,24 @@ terraform plan
 # Create infrastructure and deploy
 terraform apply
 
-# Destroy Azure infrastructure
-terraform destroy
+# Because ACR is empty, Kubernetes deployment is waiting for customer-api and order-api images 
+# to be uploaded to ACR. Open another terminal, login to ACR and push local docker images to ACR.
+az acr login --name ArchitectureDemoACR
+sh push_images_acr.sh
 
 # Configure kubectl to connect to your Kubernetes cluster
 az aks get-credentials --resource-group architecture_demo_rg --name ArchitectureDemoAKS
 
-# Get nodes
-kubectl get nodes
+# Check ingress external ip
+kubectl --namespace architecture-demo get services -o wide -w ingress-controller-ingress-nginx-controller
 
 # Check connection
 # TODO
 
-# Access the RabbitMQ Management interface: (username: guest, password: guest)
-# TODO
+# Destroy Azure infrastructure
+terraform destroy
 ```
+###
 
 ### Development with Bridge to Kubernetes
 
