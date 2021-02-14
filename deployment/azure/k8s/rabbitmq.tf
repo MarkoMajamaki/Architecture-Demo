@@ -34,7 +34,7 @@ resource "kubernetes_config_map" "rabbitmq" {
   }
 
   data = {
-    RabbitMq__HostName = "rabbitmq.architecture-demo"
+    RabbitMq__HostName = "rabbitmq.architecture-demo.svc.cluster.local"
     RabbitMq__Port = "5672"
     RabbitMq__UserName = "guest"
     RabbitMq__Password = "guest"

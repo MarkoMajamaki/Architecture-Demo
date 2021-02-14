@@ -19,54 +19,59 @@ Used technologies:
 * Swager
 * Clean architecture
 
-### Deployment with docker-compose
+## Deployment with docker-compose
 
 ```bash
 # Deploy with docker compose
-make docker-compose-deploy
+sh deployment/docker-compose/deploy.sh deploy
 
 # Destroy deployment
-make docker-compose-destroy
+sh deployment/docker-compose/deploy.sh destroy
 ```
 
-### Deployment with Kind
+## Deployment with Kind
 
 ```bash
 # Deploy to Kind cluster
-make kind-deploy
-
-# Delete cluster
-make kind-destroy
+sh deployment/kind/deploy.sh deploy
 
 # Access the RabbitMQ Management interface: (username: guest, password: guest)
-kubectl port-forward --namespace architecture-demo svc/rabbitmq 15672:15672 && open http://127.0.0.1:15672/
+kubectl port-forward --namespace architecture-demo svc/rabbitmq 15672:15672
+http://127.0.0.1:15672/
 
-# Test connection
-curl -k https://localhost/customer-api/customer
+# Open frontend
+https://localhost
+
+# Delete cluster
+sh deployment/kind/deploy.sh destroy
 ```
 
-### Deployment with Minikube
+## Deployment with Minikube
 
 ```bash
-# Remove <minikube ip> architecture-demo.info from /etc/hosts if this is NOT first time to deploy!
+# Close docker desktop and remove <minikube ip> architecture-demo.info from /etc/hosts if this is NOT first time to deploy!
 
 # Deploy to minikube
-make minikube-deploy
+sh deployment/minikube/deploy.sh deploy
 
-# Destroy minikube
-make minikube-destroy
+# Open client
+open https://architecture-demo.info
+
+# Check api connection
+curl -k https://architecture-demo.info/customer-api/customer
 
 # Open minikube dashboard for debugging
 minikube dashboard
 
-# Check connection
-curl -k https://architecture-demo.info/customer-api/customer
-
 # Access the RabbitMQ Management interface: (username: guest, password: guest)
-kubectl -n architecture-demo port-forward rabbitmq-0 8080:15672 && open http://localhost:8080
+kubectl port-forward --namespace architecture-demo svc/rabbitmq 15672:15672
+http://127.0.0.1:15672
+
+# Destroy minikube
+sh deployment/minikube/deploy.sh destroy
 ```
 
-### Deployment to Azure
+## Deployment to Azure
 
 ```bash
 # Login to Azure
@@ -102,14 +107,30 @@ az aks get-credentials --resource-group architecture_demo_rg --name Architecture
 kubectl --namespace architecture-demo get services -o wide -w ingress-controller-ingress-nginx-controller
 
 # Check connection
-# TODO
+https://EXTERNAL_IP
 
 # Destroy Azure infrastructure
 terraform destroy
 ```
 ###
 
-### Development with Bridge to Kubernetes
+## Mirror all RabbitMQ nodes
+bash
+```
+# Open RabbitMQ first node
+kubectl exec -it rabbitmq-0 bash -n architecture-demo
+
+# Mirror all RabbitMQ nodes
+rabbitmqctl set_policy ha-fed \
+    ".*" '{"federation-upstream-set":"all", "ha-sync-mode":"automatic", "ha-mode":"all" }' \
+    --priority 1 \
+    --apply-to queues
+
+# Close first node
+exit
+```
+
+## Development with Bridge to Kubernetes
 
 ```bash
 # Set context to minikube namespace architecture-demo

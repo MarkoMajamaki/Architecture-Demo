@@ -30,7 +30,7 @@ spec:
                 name: architecture-demo-secrets
                 key: SA_PASSWORD     
           - name: RabbitMq__HostName 
-            value: "rabbitmq.architecture-demo"
+            value: "rabbitmq.architecture-demo.svc.cluster.local"
           - name: RabbitMq__Port
             value: "5672"
           - name: RabbitMq__UserName

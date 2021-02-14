@@ -63,7 +63,7 @@ namespace OrderApi.Application
         private void InitializeRabbitMqListener()
         {
             ConnectionFactory factory = new ConnectionFactory();
-            factory.Uri = new Uri("amqp://" + _rabbitMqConfiguration.UserName + ":" + _rabbitMqConfiguration.Password + "@" + _rabbitMqConfiguration.HostName + ".svc.cluster.local:5672/");
+            factory.Uri = new Uri("amqp://" + _rabbitMqConfiguration.UserName + ":" + _rabbitMqConfiguration.Password + "@" + _rabbitMqConfiguration.HostName + ":" + _rabbitMqConfiguration.Port + "/");
 
             _connection = factory.CreateConnection();
 

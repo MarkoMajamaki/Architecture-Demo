@@ -48,7 +48,7 @@ namespace CustomerApi.Application
         private void CreateConnection()
         {
             // Use this with kind
-            string connectionUrl = "amqp://" + _rabbitMqOptions.UserName + ":" + _rabbitMqOptions.Password + "@" + _rabbitMqOptions.HostName + ".svc.cluster.local:5672/";
+            string connectionUrl = "amqp://" + _rabbitMqOptions.UserName + ":" + _rabbitMqOptions.Password + "@" + _rabbitMqOptions.HostName + ":" + _rabbitMqOptions.Port + "/";
                         
             // Use this with Bridge to Kubernetes after opening port with command:
             // kubectl -n architecture-demo port-forward rabbitmq-0 8001:5672

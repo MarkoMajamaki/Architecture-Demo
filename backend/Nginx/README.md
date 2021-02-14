@@ -1,1 +1,0 @@
-This is used only with docker-compose deployment
