@@ -80,12 +80,6 @@ az login
 # Go Terraform folder to execute commands
 cd deployment/azure
 
-# Create TLS certificate
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -out ingress-tls.crt \
-    -keyout ingress-tls.key \
-    -subj "/CN=architecture-demo.info/O=ingress-tls"
-
 # Init Terraform infrastructure
 terraform init
 
