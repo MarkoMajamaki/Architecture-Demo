@@ -21,6 +21,15 @@ steps:
   inputs:
     command: 'init'
     workingDirectory: '$(tf_base_infrastructure_path)'
+    backendType: 'azurerm'
+    backendServiceArm: 'AzureServiceConnection'
+    ensureBackend: true
+    backendAzureRmResourceGroupName: 'tfstate_resource_group'
+    backendAzureRmResourceGroupLocation: 'northeurope'
+    backendAzureRmStorageAccountName: 'tfstate_storage_account'
+    backendAzureRmContainerName: 'tfstate_container'
+    backendAzureRmKey: 'tfstate_key'
+    allowTelemetryCollection: true
     
 - task: TerraformCLI@0
   displayName: terraform plan base infrastructure
@@ -38,15 +47,12 @@ steps:
     workingDirectory: '$(tf_base_infrastructure_path)'
     environmentServiceName: 'AzureServiceConnection'
     commandOptions: '-var-file $(tf_var_file_path)'
-#- task: terraform-outputs@0
-#  inputs:
-#    workingDirectory: '$(tf_base_infrastructure_path)'
-#    pathToTerraform: '$(tf_base_infrastructure_path)'
-#    mapSensitiveOutputsAsSecrets: false
 
 - bash: |
     acr_login_server=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.cluster_name.value' -r)
-#    RESOURCE_GROUP_NAME=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.resource_group_name.value' -r)
+    aks_host=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.aks_host.value' -r)
+    echo "##vso[task.setvariable variable=acr_login_server]$acr_login_server"
+    echo "##vso[task.setvariable variable=aks_host]$aks_host"
 
 - task: DockerInstaller@0
   displayName: Install Docker
