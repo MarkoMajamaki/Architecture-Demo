@@ -26,7 +26,7 @@ steps:
     ensureBackend: true
     backendAzureRmResourceGroupName: 'tfstate_resource_group'
     backendAzureRmResourceGroupLocation: 'northeurope'
-    backendAzureRmStorageAccountName: 'tfstateStorageAccount'
+    backendAzureRmStorageAccountName: 'tfstateStorageAccount532231'
     backendAzureRmContainerName: 'tfstate_container'
     backendAzureRmKey: 'tfstate_key'
     allowTelemetryCollection: true
@@ -39,33 +39,33 @@ steps:
     environmentServiceName: 'AzureServiceConnection'
     commandOptions: '-var-file $(tf_var_file_path)'
 
-- task: TerraformCLI@0
-  name: terraformApply
-  displayName: terraform apply base infrastructure
-  inputs:
-    command: 'apply'
-    workingDirectory: '$(tf_base_infrastructure_path)'
-    environmentServiceName: 'AzureServiceConnection'
-    commandOptions: '-var-file $(tf_var_file_path)'
+#- task: TerraformCLI@0
+#  name: terraformApply
+#  displayName: terraform apply base infrastructure
+#  inputs:
+#    command: 'apply'
+#    workingDirectory: '$(tf_base_infrastructure_path)'
+#    environmentServiceName: 'AzureServiceConnection'
+#    commandOptions: '-var-file $(tf_var_file_path)'
 
-- bash: |
-    acr_login_server=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.cluster_name.value' -r)
-    aks_host=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.aks_host.value' -r)
-    echo "##vso[task.setvariable variable=acr_login_server]$acr_login_server"
-    echo "##vso[task.setvariable variable=aks_host]$aks_host"
+#- bash: |
+#    acr_login_server=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.cluster_name.value' -r)
+#    aks_host=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.aks_host.value' -r)
+#    echo "##vso[task.setvariable variable=acr_login_server]$acr_login_server"
+#    echo "##vso[task.setvariable variable=aks_host]$aks_host"
 
-- task: DockerInstaller@0
-  displayName: Install Docker
-  inputs:
-    dockerVersion: '17.09.0-ce'
+#- task: DockerInstaller@0
+#  displayName: Install Docker
+#  inputs:
+#    dockerVersion: '17.09.0-ce'
 
-- task: Docker@2
-  displayName: Build CustomerApi and push to ACR
-  inputs:
-    command: 'buildAndPush'
-    containerRegistry: '$(acr_login_server)'
-    Dockerfile: '$(System.DefaultWorkingDirectory)/backend/CustomerApi'
-    buildContext: '$(System.DefaultWorkingDirectory)/backend/CustomerApi'
+#- task: Docker@2
+#  displayName: Build CustomerApi and push to ACR
+#  inputs:
+#    command: 'buildAndPush'
+#    containerRegistry: '$(acr_login_server)'
+#    Dockerfile: '$(System.DefaultWorkingDirectory)/backend/CustomerApi'
+#    buildContext: '$(System.DefaultWorkingDirectory)/backend/CustomerApi'
 
 #- task: CmdLine@2
 #  inputs:
