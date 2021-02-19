@@ -29,24 +29,24 @@ steps:
     environmentServiceName: 'AzureServiceConnection'
     commandOptions: '-var-file $(tf_var_file_path)'
 
-#- task: TerraformCLI@0
-#  displayName: terraform apply base infrastructure
-#  inputs:
-#    command: 'apply'
-#    workingDirectory: '$(tf_base_infrastructure_path)'
-#    environmentServiceName: 'AzureServiceConnection'
-#    commandOptions: '-var-file $(tf_var_file_path)'
+- task: TerraformCLI@0
+  displayName: terraform apply base infrastructure
+  inputs:
+    command: 'apply'
+    workingDirectory: '$(tf_base_infrastructure_path)'
+    environmentServiceName: 'AzureServiceConnection'
+    commandOptions: '-var-file $(tf_var_file_path)'
 
-#- task: DockerInstaller@0
-#  displayName: Install Docker
-#  inputs:
-#    dockerVersion: '17.09.0-ce'
+- task: DockerInstaller@0
+  displayName: Install Docker
+  inputs:
+    dockerVersion: '17.09.0-ce'
 
-#- task: Docker@2
-#  displayName: Build CustomerApi and push to ACR
-#  inputs:
-#    command: 'buildAndPush'
-#    Dockerfile: '**/backend/CustomerApi'
+- task: Docker@2
+  displayName: Build CustomerApi and push to ACR
+  inputs:
+    command: 'buildAndPush'
+    Dockerfile: '$(System.DefaultWorkingDirectory)/backend/CustomerApi'
 
 #- task: CmdLine@2
 #  inputs:
