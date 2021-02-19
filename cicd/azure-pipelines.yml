@@ -5,8 +5,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  TF_VAR_FILE_PATH: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
-  TF_BASE_INFRASTRUCTURE_PATH: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
+  tf_var_file_path: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
+  tf_base_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
 
 steps:
 
@@ -19,23 +19,23 @@ steps:
   displayName: terraform init base infrastructure
   inputs:
     command: 'init'
-    workingDirectory: '$(TF_BASE_INFRASTRUCTURE_PATH)'
+    workingDirectory: '$(tf_base_infrastructure_path)'
     
 - task: TerraformCLI@0
   displayName: terraform plan base infrastructure
   inputs:
     command: 'plan'
-    workingDirectory: '$(TF_BASE_INFRASTRUCTURE_PATH)'
+    workingDirectory: '$(tf_base_infrastructure_path)'
     environmentServiceName: 'AzureServiceConnection'
-    commandOptions: '-var-file $(TF_VAR_FILE_PATH)'
+    commandOptions: '-var-file $(tf_var_file_path)'
 
 #- task: TerraformCLI@0
 #  displayName: terraform apply base infrastructure
 #  inputs:
 #    command: 'apply'
-#    workingDirectory: '$(TF_BASE_INFRASTRUCTURE_PATH)'
+#    workingDirectory: '$(tf_base_infrastructure_path)'
 #    environmentServiceName: 'AzureServiceConnection'
-#    commandOptions: '-var-file $(TF_VAR_FILE_PATH)'
+#    commandOptions: '-var-file $(tf_var_file_path)'
 
 #- task: DockerInstaller@0
 #  displayName: Install Docker
