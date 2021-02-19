@@ -7,6 +7,7 @@ pool:
 variables:
   tf_var_file_path: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
   tf_base_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
+  cluster_name:
 
 steps:
 
@@ -37,14 +38,14 @@ steps:
     workingDirectory: '$(tf_base_infrastructure_path)'
     environmentServiceName: 'AzureServiceConnection'
     commandOptions: '-var-file $(tf_var_file_path)'
-- task: terraform-outputs@0
-  inputs:
-    workingDirectory: '$(tf_base_infrastructure_path)'
-    pathToTerraform: '$(tf_base_infrastructure_path)'
-    mapSensitiveOutputsAsSecrets: false
+#- task: terraform-outputs@0
+#  inputs:
+#    workingDirectory: '$(tf_base_infrastructure_path)'
+#    pathToTerraform: '$(tf_base_infrastructure_path)'
+#    mapSensitiveOutputsAsSecrets: false
 
-#- bash: |
-#    CLUSTER_NAME=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.cluster_name.value' -r)
+- bash: |
+    cluster_name=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.cluster_name.value' -r)
 #    RESOURCE_GROUP_NAME=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.resource_group_name.value' -r)
 
 - task: DockerInstaller@0
