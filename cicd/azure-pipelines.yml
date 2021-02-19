@@ -6,6 +6,7 @@ pool:
 
 variables:
   TF_VAR_FILE_PATH: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
+  TF_BASE_INFRASTRUCTURE_PATH: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
 
 steps:
 
@@ -18,13 +19,13 @@ steps:
   displayName: terraform init base infrastructure
   inputs:
     command: 'init'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
+    workingDirectory: '$(TF_BASE_INFRASTRUCTURE_PATH)'
     
 - task: TerraformCLI@0
   displayName: terraform plan base infrastructure
   inputs:
     command: 'plan'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
+    workingDirectory: '$(TF_BASE_INFRASTRUCTURE_PATH)'
     environmentServiceName: 'AzureServiceConnection'
     commandOptions: '-var-file $(TF_VAR_FILE_PATH)'
 
@@ -32,7 +33,7 @@ steps:
 #  displayName: terraform apply base infrastructure
 #  inputs:
 #    command: 'apply'
-#    workingDirectory: '$(System.DefaultWorkingDirectory)/deployment/azure'
+#    workingDirectory: '$(TF_BASE_INFRASTRUCTURE_PATH)'
 #    environmentServiceName: 'AzureServiceConnection'
 #    commandOptions: '-var-file $(TF_VAR_FILE_PATH)'
 
