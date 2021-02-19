@@ -7,7 +7,7 @@ pool:
 variables:
   tf_var_file_path: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
   tf_base_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
-  cluster_name:
+  acr_login_server:
 
 steps:
 
@@ -45,7 +45,7 @@ steps:
 #    mapSensitiveOutputsAsSecrets: false
 
 - bash: |
-    cluster_name=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.cluster_name.value' -r)
+    acr_login_server=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.cluster_name.value' -r)
 #    RESOURCE_GROUP_NAME=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.resource_group_name.value' -r)
 
 - task: DockerInstaller@0
