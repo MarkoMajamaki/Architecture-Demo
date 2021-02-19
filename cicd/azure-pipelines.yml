@@ -26,7 +26,7 @@ steps:
     ensureBackend: true
     backendAzureRmResourceGroupName: 'tfstate_resource_group'
     backendAzureRmResourceGroupLocation: 'northeurope'
-    backendAzureRmStorageAccountName: 'tfstateStorageAccount532'
+    backendAzureRmStorageAccountName: 'tfstate532431243'
     backendAzureRmContainerName: 'tfstate_container'
     backendAzureRmKey: 'tfstate_key'
     allowTelemetryCollection: true
