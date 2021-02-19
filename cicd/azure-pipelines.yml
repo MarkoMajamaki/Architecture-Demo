@@ -37,10 +37,15 @@ steps:
     workingDirectory: '$(tf_base_infrastructure_path)'
     environmentServiceName: 'AzureServiceConnection'
     commandOptions: '-var-file $(tf_var_file_path)'
+- task: terraform-outputs@0
+  inputs:
+    workingDirectory: '$(tf_base_infrastructure_path)'
+    pathToTerraform: '$(tf_base_infrastructure_path)'
+    mapSensitiveOutputsAsSecrets: false
 
-- bash: |
-    CLUSTER_NAME=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.cluster_name.value' -r)
-    RESOURCE_GROUP_NAME=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.resource_group_name.value' -r)
+#- bash: |
+#    CLUSTER_NAME=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.cluster_name.value' -r)
+#    RESOURCE_GROUP_NAME=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.resource_group_name.value' -r)
 
 - task: DockerInstaller@0
   displayName: Install Docker
@@ -51,7 +56,7 @@ steps:
   displayName: Build CustomerApi and push to ACR
   inputs:
     command: 'buildAndPush'
-    containerRegistry: '$(CLUSTER_NAME)'
+    containerRegistry: '$(acr_login_server)'
     Dockerfile: '$(System.DefaultWorkingDirectory)/backend/CustomerApi'
     buildContext: '$(System.DefaultWorkingDirectory)/backend/CustomerApi'
 
