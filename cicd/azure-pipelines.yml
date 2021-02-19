@@ -7,7 +7,7 @@ pool:
 variables:
   tf_var_file_path: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
   tf_base_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
-  acr_login_server:
+  tfstate_storage_account_name: 'customname.  klmklmkl'
 
 steps:
 
@@ -26,6 +26,7 @@ steps:
     ensureBackend: true
     backendAzureRmResourceGroupName: 'tfstate_resource_group'
     backendAzureRmResourceGroupLocation: 'northeurope'
+    backendAzureRmStorageAccountName: '$(tfstate_storage_account_name)'
     backendAzureRmContainerName: 'tfstate_container'
     backendAzureRmKey: 'tfstate_key'
     allowTelemetryCollection: true
