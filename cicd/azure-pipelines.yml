@@ -1,0 +1,54 @@
+trigger:
+- none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  TF_VAR_FILE_PATH: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
+
+steps:
+
+- task: TerraformInstaller@0
+  displayName: terraform install
+  inputs:
+    terraformVersion: 'latest'
+    
+- task: TerraformCLI@0
+  displayName: terraform init base infrastructure
+  inputs:
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
+    
+- task: TerraformCLI@0
+  displayName: terraform plan base infrastructure
+  inputs:
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
+    environmentServiceName: 'AzureServiceConnection'
+    commandOptions: '-var-file $(TF_VAR_FILE_PATH)'
+
+#- task: TerraformCLI@0
+#  displayName: terraform apply base infrastructure
+#  inputs:
+#    command: 'apply'
+#    workingDirectory: '$(System.DefaultWorkingDirectory)/deployment/azure'
+#    environmentServiceName: 'AzureServiceConnection'
+#    commandOptions: '-var-file $(TF_VAR_FILE_PATH)'
+
+#- task: DockerInstaller@0
+#  displayName: Install Docker
+#  inputs:
+#    dockerVersion: '17.09.0-ce'
+
+#- task: Docker@2
+#  displayName: Build CustomerApi and push to ACR
+#  inputs:
+#    command: 'buildAndPush'
+#    Dockerfile: '**/backend/CustomerApi'
+
+#- task: CmdLine@2
+#  inputs:
+#    script: |
+#      az acr login --name ArchitectureDemoACR
+#      sh push_images_acr.sh
