@@ -7,7 +7,7 @@ pool:
 variables:
   tf_var_file_path: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
   tf_base_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
-  tfstate_storage_account_name: 'customname.  klmklmkl'
+  tfstate_storage_account_name: 'architecturedemotfstate' # Custom name!
 
 steps:
 
