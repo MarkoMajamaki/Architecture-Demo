@@ -8,6 +8,7 @@ variables:
   tf_var_file_path: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
   tf_base_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
   tfstate_storage_account_name: 'architecturedemotfstate' # Custom name!
+  anyTfChanges: false
   acr_login_server:
   aks_host:
 
@@ -39,10 +40,32 @@ steps:
     command: 'plan'
     workingDirectory: '$(tf_base_infrastructure_path)'
     environmentServiceName: 'AzureServiceConnection'
-    commandOptions: '-var-file $(tf_var_file_path)'
+    commandOptions: '-var-file $(tf_var_file_path) -out=tfplan'
+    allowTelemetryCollection: true
+
+- task: PowerShell@2
+  displayName: detect any terraform change
+  inputs:
+    workingDirectory: '$(tf_base_infrastructure_path)'
+    targetType: 'inline'
+    script: |
+      # Write-Host "LASTEXITCODE : $LASTEXITCODE"
+      $plan = $(terraform show -json tfplan | ConvertFrom-Json)
+      $actions = $plan.resource_changes.change.actions
+      Write-Host "Terraform actions : $actions"
+      if (($actions -contains 'create') -or ($actions -contains 'delete') -or ($actions -contains 'update'))
+      {
+        Write-Host "Terraform will perform the following actions : $actions"
+        Write-Host "##vso[task.setvariable variable=anyTfChanges;]true"
+      }
+      else
+      {
+        Write-Host "There is no change detected in Terraform tfplan file"
+      }
 
 - task: TerraformCLI@0
   name: terraformApply
+  condition: eq(variables.anyTfChanges, true)
   displayName: terraform apply base infrastructure
   inputs:
     command: 'apply'
