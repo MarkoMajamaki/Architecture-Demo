@@ -1,0 +1,97 @@
+trigger:
+- none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  tf_var_file_path: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
+  tf_base_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
+  tfstate_storage_account_name: 'architecturedemotfstate' # Custom name!
+  anyTfChanges: false
+  acr_login_server:
+  aks_host:
+
+steps:
+
+- task: TerraformInstaller@0
+  displayName: terraform install
+  inputs:
+    terraformVersion: '0.14.7'
+
+- task: TerraformTaskV1@0
+  displayName: terraform init base infrastructure
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '$(tf_base_infrastructure_path)'
+    backendServiceArm: 'AzureServiceConnection'
+    backendAzureRmResourceGroupName: 'tfstate_resource_group'
+    backendAzureRmStorageAccountName: '$(tfstate_storage_account_name)'
+    backendAzureRmContainerName: 'tfstate_container'
+    backendAzureRmKey: 'tfstate_key'
+
+- task: TerraformTaskV1@0
+  displayName: terraform plan base infrastructure
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(tf_base_infrastructure_path)'
+    commandOptions: '-var-file $(tf_var_file_path) -out=tfplan'
+    environmentServiceNameAzureRM: 'AzureServiceConnection'
+
+- task: PowerShell@2
+  displayName: detect any terraform change
+  inputs:
+    workingDirectory: '$(tf_base_infrastructure_path)'
+    targetType: 'inline'
+    script: |
+      # Write-Host "LASTEXITCODE : $LASTEXITCODE"
+      $plan = $(terraform show -json tfplan | ConvertFrom-Json)
+      $actions = $plan.resource_changes.change.actions
+      Write-Host "Terraform actions : $actions"
+      if (($actions -contains 'create') -or ($actions -contains 'delete') -or ($actions -contains 'update'))
+      {
+        Write-Host "Terraform will perform the following actions : $actions"
+        Write-Host "##vso[task.setvariable variable=anyTfChanges;]true"
+      }
+      else
+      {
+        Write-Host "There is no change detected in Terraform tfplan file"
+      }
+
+- task: TerraformTaskV1@0
+  displayName: terraform apply base infrastructure
+  name: terraformApply
+  condition: eq(variables.anyTfChanges, true)
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    workingDirectory: '$(tf_base_infrastructure_path)'
+    commandOptions: '-var-file $(tf_var_file_path)'
+    environmentServiceNameAzureRM: 'AzureServiceConnection'
+
+- bash: |
+    acr_login_server=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.cluster_name.value' -r)
+    aks_host=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.aks_host.value' -r)
+    echo "##vso[task.setvariable variable=acr_login_server]$acr_login_server"
+    echo "##vso[task.setvariable variable=aks_host]$aks_host"
+
+- task: DockerInstaller@0
+  displayName: Install Docker
+  inputs:
+    dockerVersion: '17.09.0-ce'
+
+- task: Docker@2
+  displayName: Build CustomerApi and push to ACR
+  inputs:
+    command: 'buildAndPush'
+    containerRegistry: '$(acr_login_server)'
+    Dockerfile: '$(System.DefaultWorkingDirectory)/backend/CustomerApi'
+    buildContext: '$(System.DefaultWorkingDirectory)/backend/CustomerApi'
+
+#- task: CmdLine@2
+#  inputs:
+#    script: |
+#      az acr login --name ArchitectureDemoACR
+#      sh push_images_acr.sh

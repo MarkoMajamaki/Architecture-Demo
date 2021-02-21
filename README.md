@@ -106,7 +106,14 @@ https://EXTERNAL_IP
 # Destroy Azure infrastructure
 terraform destroy
 ```
-###
+
+### Azure Devops
+Create service principal to connect Azure Devops and Azure. Use this to create new service connection in Azure Devops settings. Terraform ACR role assignment creation needs owner rights.
+
+bash
+```
+az ad sp create-for-rbac -n "Azure_Devops_SP" --role owner
+```
 
 ## Mirror all RabbitMQ nodes
 bash
