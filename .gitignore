@@ -22,3 +22,5 @@ deployment/azure/terraform.tfstate
 deployment/azure/terraform.tfstate.backup
 deployment/azure/ingress-tls.crt
 deployment/azure/ingress-tls.key
+backend/CustomerApi/Tests/CustomerApi.Application.Test/bin/
+backend/CustomerApi/Tests/CustomerApi.Application.Test/obj/
