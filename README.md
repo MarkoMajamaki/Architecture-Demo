@@ -80,6 +80,9 @@ az login
 # Go Terraform folder to execute commands
 cd deployment/azure
 
+# Create Terraform state backend
+sh scripts/init_remote_state_backend.sh
+
 # Init Terraform infrastructure
 terraform init
 
@@ -92,7 +95,7 @@ terraform apply
 # Because ACR is empty, Kubernetes deployment is waiting for customer-api and order-api images 
 # to be uploaded to ACR. Open another terminal, login to ACR and push local docker images to ACR.
 az acr login --name ArchitectureDemoACR
-sh push_images_acr.sh
+sh scripts/build_and_push_arch.sh
 
 # Configure kubectl to connect to your Kubernetes cluster
 az aks get-credentials --resource-group architecture_demo_rg --name ArchitectureDemoAKS
@@ -110,13 +113,11 @@ terraform destroy
 ### Azure Devops
 Create service principal to connect Azure Devops and Azure. Use this to create new service connection in Azure Devops settings. Terraform ACR role assignment creation needs owner rights.
 
-bash
 ```
 az ad sp create-for-rbac -n "Azure_Devops_SP" --role owner
 ```
 
 ## Mirror all RabbitMQ nodes
-bash
 ```
 # Open RabbitMQ first node
 kubectl exec -it rabbitmq-0 bash -n architecture-demo

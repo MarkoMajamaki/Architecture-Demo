@@ -1,97 +1,162 @@
 trigger:
 - none
 
-pool:
-  vmImage: 'ubuntu-latest'
+stages:
 
-variables:
-  tf_var_file_path: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
-  tf_base_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
-  tfstate_storage_account_name: 'architecturedemotfstate' # Custom name!
-  anyTfChanges: false
-  acr_login_server:
-  aks_host:
+#
+# Create infrastructure with terraform
+#
+- stage: Infrastructure
+  displayName: 'Create infrasturcture'
 
-steps:
+  jobs:
+  - job: Create
 
-- task: TerraformInstaller@0
-  displayName: terraform install
-  inputs:
-    terraformVersion: '0.14.7'
+    pool:
+      vmImage: 'ubuntu-latest'
 
-- task: TerraformTaskV1@0
-  displayName: terraform init base infrastructure
-  inputs:
-    provider: 'azurerm'
-    command: 'init'
-    workingDirectory: '$(tf_base_infrastructure_path)'
-    backendServiceArm: 'AzureServiceConnection'
-    backendAzureRmResourceGroupName: 'tfstate_resource_group'
-    backendAzureRmStorageAccountName: '$(tfstate_storage_account_name)'
-    backendAzureRmContainerName: 'tfstate_container'
-    backendAzureRmKey: 'tfstate_key'
+    variables:
+      tf_var_file_path: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
+      tf_base_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
 
-- task: TerraformTaskV1@0
-  displayName: terraform plan base infrastructure
-  inputs:
-    provider: 'azurerm'
-    command: 'plan'
-    workingDirectory: '$(tf_base_infrastructure_path)'
-    commandOptions: '-var-file $(tf_var_file_path) -out=tfplan'
-    environmentServiceNameAzureRM: 'AzureServiceConnection'
+    steps:
+    
+    # Install terraform
+    - task: TerraformInstaller@0
+      inputs:
+        terraformVersion: '0.14.7'
 
-- task: PowerShell@2
-  displayName: detect any terraform change
-  inputs:
-    workingDirectory: '$(tf_base_infrastructure_path)'
-    targetType: 'inline'
-    script: |
-      # Write-Host "LASTEXITCODE : $LASTEXITCODE"
-      $plan = $(terraform show -json tfplan | ConvertFrom-Json)
-      $actions = $plan.resource_changes.change.actions
-      Write-Host "Terraform actions : $actions"
-      if (($actions -contains 'create') -or ($actions -contains 'delete') -or ($actions -contains 'update'))
-      {
-        Write-Host "Terraform will perform the following actions : $actions"
-        Write-Host "##vso[task.setvariable variable=anyTfChanges;]true"
-      }
-      else
-      {
-        Write-Host "There is no change detected in Terraform tfplan file"
-      }
+    # Terraform init with backend
+    - task: TerraformTaskV1@0
+      displayName: Terraform init
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(tf_base_infrastructure_path)'
+        backendServiceArm: 'AzureServiceConnection'
+        backendAzureRmResourceGroupName: 'architecture_demo_tfstate_rg'
+        backendAzureRmStorageAccountName: 'tfstate000'
+        backendAzureRmContainerName: 'tfstate-container'
+        backendAzureRmKey: 'terraform.tfstate'
+        
+    # Terraform plan and save output
+    - task: TerraformTaskV1@0
+      displayName: Terraform plan
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: '$(tf_base_infrastructure_path)'
+        commandOptions: '-var-file $(tf_var_file_path) -out=tfplan'
+        environmentServiceNameAzureRM: 'AzureServiceConnection'
 
-- task: TerraformTaskV1@0
-  displayName: terraform apply base infrastructure
-  name: terraformApply
-  condition: eq(variables.anyTfChanges, true)
-  inputs:
-    provider: 'azurerm'
-    command: 'apply'
-    workingDirectory: '$(tf_base_infrastructure_path)'
-    commandOptions: '-var-file $(tf_var_file_path)'
-    environmentServiceNameAzureRM: 'AzureServiceConnection'
+    # Terraform apply
+    - task: TerraformTaskV1@0
+      displayName: Terraform apply
+      name: TerraformApply
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(tf_base_infrastructure_path)'
+        commandOptions: 'tfplan'
+        environmentServiceNameAzureRM: 'AzureServiceConnection'
+    
+    # Save ACR and AKS address
+    - bash: |
+        ACR_LOGIN_SERVER=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.acr_login_server.value' -r)
+        AKS_HOST=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.aks_host.value' -r)
+        echo "##vso[task.setvariable variable=acr_login_server;isOutput=true]$ACR_LOGIN_SERVER"
+        echo "##vso[task.setvariable variable=aks_host;isOutput=true]$AKS_HOST"
+      name: Outputs
+      displayName: Set Terraform output variables
 
-- bash: |
-    acr_login_server=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.cluster_name.value' -r)
-    aks_host=$(cat $(terraformApply.jsonOutputVariablesPath) | jq '.aks_host.value' -r)
-    echo "##vso[task.setvariable variable=acr_login_server]$acr_login_server"
-    echo "##vso[task.setvariable variable=aks_host]$aks_host"
+#
+# Run tests
+#
+#- stage: 'Infrastructure'
+#  displayName: 'Run test automation'
+#  dependsOn: Build
+#
+#  jobs:
+#  - job:
+#
+#    pool:
+#      vmImage: 'ubuntu-latest'
+#
+#    steps:
 
-- task: DockerInstaller@0
-  displayName: Install Docker
-  inputs:
-    dockerVersion: '17.09.0-ce'
+#
+# Build code, create docker images and push to ACR
+#
+- stage: 'Build'
+  displayName: 'Build and push to ACR'
+  dependsOn: Test
 
-- task: Docker@2
-  displayName: Build CustomerApi and push to ACR
-  inputs:
-    command: 'buildAndPush'
-    containerRegistry: '$(acr_login_server)'
-    Dockerfile: '$(System.DefaultWorkingDirectory)/backend/CustomerApi'
-    buildContext: '$(System.DefaultWorkingDirectory)/backend/CustomerApi'
+  jobs:
+  - job: Build
+    variables:
+      acr_login_server: $[stageDependencies.Infrastructure.Create.outputs['Outputs.acr_login_server'] ]
+      aks_host: $[stageDependencies.Infrastructure.Create.outputs['Outputs.aks_host'] ]
+      customer_api_image_name: '$(acr_login_server)/customer-api:$(Build.BuildId)'  
+      order_api_image_name: '$(acr_login_server)/order-api:$(Build.BuildId)'  
+      frontend_Image_name: '$(acr_login_server)/frontend:$(Build.BuildId)'  
 
-#- task: CmdLine@2
-#  inputs:
-#    script: |
-#      az acr login --name ArchitectureDemoACR
-#      sh push_images_acr.sh
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    steps:
+    - bash: |
+        echo $(acr_login_server)
+        echo $(aks_host)
+        echo $(customer_api_image_name)
+        echo $(order_api_image_name)
+        echo $(frontend_Image_name)
+      displayName: Show variables for debug
+
+    - task: DockerInstaller@0
+      inputs:
+        dockerVersion: '17.09.0-ce'
+
+    - task: AzureCLI@2
+      displayName: Build and push docker images to ACR 
+      inputs:
+        azureSubscription: 'AzureServiceConnection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az acr login --name ArchitectureDemoACR
+          
+          # Build
+          docker build -t architecture_demo/order-api:v1 backend/OrderApi/
+          docker build -t architecture_demo/customer-api:v1 backend/CustomerApi/
+          # docker build -t architecture_demo/frontend:v1 frontend/
+          
+          # Tag based on ACR login path
+          docker tag architecture_demo/customer-api:v1 architecturedemoacr.azurecr.io/customer-api:v1
+          docker tag architecture_demo/order-api:v1 architecturedemoacr.azurecr.io/order-api:v1
+          # docker tag architecture_demo/frontend:v1 architecturedemoacr.azurecr.io/frontend:v1
+          
+          # Push to ACR
+          docker push architecturedemoacr.azurecr.io/customer-api:v1
+          docker push architecturedemoacr.azurecr.io/order-api:v1
+          # docker push architecturedemoacr.azurecr.io/frontend:v1
+
+
+
+#
+# Pull images from ACR and deploy
+#
+#- stage: 'Deploy'
+#  displayName: 'Deploy to Azure'
+#  dependsOn: Test
+#
+#  jobs:
+#  - deployment: Deploy
+#    pool:
+#      vmImage: 'ubuntu-latest'
+#
+#    environment: Dev
+#
+#    strategy:
+#      runOnce:
+#        deploy:
+#         steps:
