@@ -72,17 +72,28 @@ stages:
 #
 # Run tests
 #
-#- stage: 'Infrastructure'
-#  displayName: 'Run test automation'
-#  dependsOn: Build
-#
-#  jobs:
-#  - job:
-#
-#    pool:
-#      vmImage: 'ubuntu-latest'
-#
-#    steps:
+- stage: 'Infrastructure'
+  displayName: 'Run test automation'
+  dependsOn: Build
+
+  jobs:
+  - job:
+    variables:
+      customer_api_test_project: backend/CustomerApi/Test/CustomerApi.Application.Test/CustomerApi.Application.Test.csproj
+
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    steps:
+    
+    - task: VSTest@2
+      inputs:
+        testSelector: 'testAssemblies'
+        testAssemblyVer2: '$(customer_api_test_project)'
+        searchFolder: '$(customer_api_test_project)'
+        testRunTitle: 'Run all tests'
+        failOnMinTestsNotRun: false
+        rerunFailedTests: false
 
 #
 # Build code, create docker images and push to ACR
