@@ -16,13 +16,21 @@ stages:
       vmImage: 'ubuntu-latest'
 
     variables:
-      tf_var_file_path: '$(System.DefaultWorkingDirectory)/deployment/azure/terraform.tfvars'
-      tf_base_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/cluster'
+      tf_core_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/core'
 
     steps:
-    
+    # Add tf state backend
+    - task: AzureCLI@2
+      displayName: Add terraform remote state backend
+      inputs:
+        azureSubscription: 'AzureServiceConnection'
+        scriptType: 'bash'
+        scriptLocation: 'scriptPath'
+        scriptPath: 'deployment/azure/scripts/init_remote_state_backend.sh'
+
     # Install terraform
     - task: TerraformInstaller@0
+      displayName: Install Terraform
       inputs:
         terraformVersion: '0.14.7'
 
@@ -32,12 +40,12 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        workingDirectory: '$(tf_base_infrastructure_path)'
+        workingDirectory: '$(tf_core_infrastructure_path)'
         backendServiceArm: 'AzureServiceConnection'
         backendAzureRmResourceGroupName: 'architecture_demo_tfstate_rg'
         backendAzureRmStorageAccountName: 'tfstate000'
         backendAzureRmContainerName: 'tfstate-container'
-        backendAzureRmKey: 'terraform.tfstate'
+        backendAzureRmKey: 'core.tfstate'
         
     # Terraform plan and save output
     - task: TerraformTaskV1@0
@@ -45,8 +53,8 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'plan'
-        workingDirectory: '$(tf_base_infrastructure_path)'
-        commandOptions: '-var-file $(tf_var_file_path) -out=tfplan'
+        workingDirectory: '$(tf_core_infrastructure_path)'
+        commandOptions: '-out=tfplan'
         environmentServiceNameAzureRM: 'AzureServiceConnection'
 
     # Terraform apply
@@ -56,74 +64,124 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'apply'
-        workingDirectory: '$(tf_base_infrastructure_path)'
+        workingDirectory: '$(tf_core_infrastructure_path)'
         commandOptions: 'tfplan'
         environmentServiceNameAzureRM: 'AzureServiceConnection'
     
-    # Save ACR and AKS address
+    # Save AKS config
     - bash: |
-        ACR_LOGIN_SERVER=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.acr_login_server.value' -r)
-        AKS_HOST=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.aks_host.value' -r)
-        echo "##vso[task.setvariable variable=acr_login_server;isOutput=true]$ACR_LOGIN_SERVER"
-        echo "##vso[task.setvariable variable=aks_host;isOutput=true]$AKS_HOST"
+        aks_kube_config=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.aks_kube_config.value' -r)
+        mkdir -p $(Pipeline.Workspace)/variables
+        echo "$aks_kube_config" > $(Pipeline.Workspace)/variables/aks_kube_config/
       name: Outputs
       displayName: Set Terraform output variables
 
+    # Publish the folder as pipeline artifact
+    - publish: $(Pipeline.Workspace)/variables
+      artifact: variables
+      displayName: Publish artifacts
+
 #
-# Run tests
+# Run tests with VSTest task
 #
-- stage: 'Infrastructure'
+- stage: 'Test'
   displayName: 'Run test automation'
-  dependsOn: Build
+  dependsOn: Infrastructure
 
   jobs:
-  - job:
+  - job: Test
     variables:
-      customer_api_test_project: backend/CustomerApi/Test/CustomerApi.Application.Test/CustomerApi.Application.Test.csproj
-
+      solution: 'backend/Backend.sln'
+      buildPlatform: 'Any CPU'
+      buildConfiguration: 'Release'
+      
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'windows-latest'
 
     steps:
-    
+
+    - task: NuGetToolInstaller@1
+      displayName: Install nuget packages
+
+    - task: NuGetCommand@2
+      displayName: Restore solution nuget packages
+      inputs:
+        restoreSolution: '$(solution)'
+
+    - task: VSBuild@1
+      displayName: Build solution
+      inputs:
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
     - task: VSTest@2
+      displayName: "Run solution unit tests"
       inputs:
         testSelector: 'testAssemblies'
-        testAssemblyVer2: '$(customer_api_test_project)'
-        searchFolder: '$(customer_api_test_project)'
-        testRunTitle: 'Run all tests'
-        failOnMinTestsNotRun: false
-        rerunFailedTests: false
+        testAssemblyVer2: |
+          **\CustomerApi.*Test.dll
+          **\OrderApi.*Test.dll
+          !**\*TestAdapter.dll
+          !**\obj\**
+          !**\ref\**
+        searchFolder: '$(System.DefaultWorkingDirectory)\backend'
+        runTestsInIsolation: true
+        codeCoverageEnabled: true
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
+#
+# Run tests with DotNetCoreCLI task
+#
+# - stage: 'Test'
+#   displayName: 'Run test automation'
+#   dependsOn: Infrastructure
+
+#   jobs:
+#   - job:
+#     variables:
+#       customer_api_test: backend/CustomerApi/Tests/CustomerApi.Application.Test/CustomerApi.Application.Test.csproj
+#       order_api_test: backend/OrderApi/Tests/OrderApi.Application.Test/OrderApi.Application.Test.csproj
+
+#     pool:
+#       vmImage: 'ubuntu-latest'
+
+#     steps:
+
+#     - task: DotNetCoreCLI@2
+#       displayName: CustomerApi unit test
+#       inputs:
+#         command: 'test'
+#         projects: '$(customer_api_test)'
+#         testRunTitle: 'CustomerApi Unit Test'      
+
+#     - task: DotNetCoreCLI@2
+#       displayName: OrderApi unit test Run
+#       inputs:
+#         command: 'test'
+#         projects: '$(order_api_test)'
+#         testRunTitle: 'OrderApi Unit Test'
+#       condition: succeededOrFailed()
+    
 #
 # Build code, create docker images and push to ACR
 #
 - stage: 'Build'
   displayName: 'Build and push to ACR'
   dependsOn: Test
+  condition: succeeded()
 
   jobs:
   - job: Build
-    variables:
-      acr_login_server: $[stageDependencies.Infrastructure.Create.outputs['Outputs.acr_login_server'] ]
-      aks_host: $[stageDependencies.Infrastructure.Create.outputs['Outputs.aks_host'] ]
-      customer_api_image_name: '$(acr_login_server)/customer-api:$(Build.BuildId)'  
-      order_api_image_name: '$(acr_login_server)/order-api:$(Build.BuildId)'  
-      frontend_Image_name: '$(acr_login_server)/frontend:$(Build.BuildId)'  
 
     pool:
       vmImage: 'ubuntu-latest'
 
     steps:
-    - bash: |
-        echo $(acr_login_server)
-        echo $(aks_host)
-        echo $(customer_api_image_name)
-        echo $(order_api_image_name)
-        echo $(frontend_Image_name)
-      displayName: Show variables for debug
 
     - task: DockerInstaller@0
+      displayName: Install docker
       inputs:
         dockerVersion: '17.09.0-ce'
 
@@ -132,42 +190,87 @@ stages:
       inputs:
         azureSubscription: 'AzureServiceConnection'
         scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az acr login --name ArchitectureDemoACR
-          
-          # Build
-          docker build -t architecture_demo/order-api:v1 backend/OrderApi/
-          docker build -t architecture_demo/customer-api:v1 backend/CustomerApi/
-          # docker build -t architecture_demo/frontend:v1 frontend/
-          
-          # Tag based on ACR login path
-          docker tag architecture_demo/customer-api:v1 architecturedemoacr.azurecr.io/customer-api:v1
-          docker tag architecture_demo/order-api:v1 architecturedemoacr.azurecr.io/order-api:v1
-          # docker tag architecture_demo/frontend:v1 architecturedemoacr.azurecr.io/frontend:v1
-          
-          # Push to ACR
-          docker push architecturedemoacr.azurecr.io/customer-api:v1
-          docker push architecturedemoacr.azurecr.io/order-api:v1
-          # docker push architecturedemoacr.azurecr.io/frontend:v1
-
-
+        scriptLocation: 'scriptPath'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/deployment/azure/scripts/'
+        scriptPath: '$(System.DefaultWorkingDirectory)/deployment/azure/scripts/build_and_push_acr.sh'
 
 #
-# Pull images from ACR and deploy
+# Pull images from ACR and deploy with Terraform Kubernetes provider
 #
-#- stage: 'Deploy'
-#  displayName: 'Deploy to Azure'
-#  dependsOn: Test
-#
-#  jobs:
-#  - deployment: Deploy
-#    pool:
-#      vmImage: 'ubuntu-latest'
-#
-#    environment: Dev
-#
-#    strategy:
-#      runOnce:
-#        deploy:
-#         steps:
+- stage: 'Deploy'
+  displayName: 'Deploy to Azure'
+  dependsOn: Build
+
+  jobs:
+  - deployment: Deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    variables:
+      tf_k8s_path: '$(System.DefaultWorkingDirectory)/deployment/azure/k8s'
+
+    environment: Prod
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+            persistCredentials: true
+
+          # Download the artifacts
+          - download: current
+            artifact: variables
+            displayName: Download artifacts
+
+          # Create Terraform config file for K8S
+          - bash: |
+              aks_kube_config=$(cat $(Pipeline.Workspace)/variables/aks_kube_config)
+              cat $aks_kube_config > $(tf_k8s_path)/kube_config
+              
+            displayName: Set artifacts to variables
+
+          # Print config file content
+          - bash: |
+              cat $(tf_k8s_path)/kube_config
+            displayName: Debug print config file content  
+
+          # Install terraform
+          - task: TerraformInstaller@0
+            displayName: Install Terraform
+            inputs:
+              terraformVersion: '0.14.7'
+
+          # Terraform init with backend
+          - task: TerraformTaskV1@0
+            displayName: Terraform init
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(tf_k8s_path)'
+              backendServiceArm: 'AzureServiceConnection'
+              backendAzureRmResourceGroupName: 'architecture_demo_tfstate_rg'
+              backendAzureRmStorageAccountName: 'tfstate000'
+              backendAzureRmContainerName: 'tfstate-container'
+              backendAzureRmKey: 'k8s.tfstate'
+              
+          # Terraform plan and save output
+          - task: TerraformTaskV1@0
+            displayName: Terraform plan
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: '$(tf_k8s_path)'
+              commandOptions: '-out=tfplan'
+              environmentServiceNameAzureRM: 'AzureServiceConnection'
+
+          # Terraform apply Kubernetes services
+          - task: TerraformTaskV1@0
+            displayName: Terraform apply
+            name: TerraformApply
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: '$(tf_k8s_path)'
+              commandOptions: 'tfplan'
+              environmentServiceNameAzureRM: 'AzureServiceConnection'
