@@ -92,6 +92,7 @@ resource "kubernetes_persistent_volume_claim" "sqlserver" {
     name = "sqlserver"
     namespace=kubernetes_namespace.architecture-demo.metadata.0.name
   }
+  wait_until_bound = false
   spec {
     storage_class_name = "default"
     access_modes = ["ReadWriteOnce"]

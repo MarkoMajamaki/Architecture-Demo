@@ -1,0 +1,1 @@
+kube_config = "./kube_config"
