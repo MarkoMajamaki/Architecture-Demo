@@ -83,19 +83,26 @@ cd deployment/azure
 # Create Terraform state backend
 sh scripts/init_remote_state_backend.sh
 
-# Init Terraform infrastructure
+# Init Terraform infrastructure, do plan, and apply plan to create base infrastructure
+cd core
 terraform init
+terraform plan -out=tfplan
+terraform apply tfplan
 
-# Do plan to create infrastructure
-terraform plan
+# Save AKS config to file from Terraform output
+terraform output -raw aks_kube_config > ../k8s/kube_config
 
-# Create infrastructure and deploy
-terraform apply
+# Start docker, build docker images and push to Azure Container Registery.
+cd ..
+sh scripts/build_and_push_acr.sh
 
-# Because ACR is empty, Kubernetes deployment is waiting for customer-api and order-api images 
-# to be uploaded to ACR. Open another terminal, login to ACR and push local docker images to ACR.
-az acr login --name ArchitectureDemoACR
-sh scripts/build_and_push_arch.sh
+# Go to Terraform kubernetes folder
+cd k8s
+
+# Init k8s terraform, do plan, and apply plan to create Kubernetes services with Terraform
+terraform init
+terraform plan -out tfplan
+terraform apply tfplan
 
 # Configure kubectl to connect to your Kubernetes cluster
 az aks get-credentials --resource-group architecture_demo_rg --name ArchitectureDemoAKS
@@ -104,10 +111,12 @@ az aks get-credentials --resource-group architecture_demo_rg --name Architecture
 kubectl --namespace architecture-demo get services -o wide -w ingress-controller-ingress-nginx-controller
 
 # Check connection
-https://EXTERNAL_IP
+https://<EXTERNAL_IP>
 
 # Destroy Azure infrastructure
-terraform destroy
+cd ../k8s && terraform destroy
+cd ../core && terraform destroy
+# TODO: delete architecture_demo_tfstate_rg
 ```
 
 ### Azure Devops
