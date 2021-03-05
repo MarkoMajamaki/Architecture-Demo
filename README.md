@@ -92,9 +92,8 @@ terraform apply tfplan
 # Save AKS config to file from Terraform output
 terraform output -raw aks_kube_config > ../k8s/kube_config
 
-# Start docker, build docker images and push to Azure Container Registery.
-cd ..
-sh scripts/build_and_push_acr.sh
+# Go to root folder, start docker, build docker images and push to Azure Container Registery.
+sh deployment/azure/scripts/build_and_push_acr.sh
 
 # Go to Terraform kubernetes folder
 cd k8s

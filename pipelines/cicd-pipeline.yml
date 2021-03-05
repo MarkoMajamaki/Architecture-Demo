@@ -72,7 +72,7 @@ stages:
     - bash: |
         aks_kube_config=$(cat $(TerraformApply.jsonOutputVariablesPath) | jq '.aks_kube_config.value' -r)
         mkdir -p $(Pipeline.Workspace)/variables
-        echo "$aks_kube_config" > $(Pipeline.Workspace)/variables/aks_kube_config/
+        echo "$aks_kube_config" > $(Pipeline.Workspace)/variables/aks_kube_config
       name: Outputs
       displayName: Set Terraform output variables
 
@@ -191,7 +191,6 @@ stages:
         azureSubscription: 'AzureServiceConnection'
         scriptType: 'bash'
         scriptLocation: 'scriptPath'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/deployment/azure/scripts/'
         scriptPath: '$(System.DefaultWorkingDirectory)/deployment/azure/scripts/build_and_push_acr.sh'
 
 #
@@ -226,8 +225,8 @@ stages:
           # Create Terraform config file for K8S
           - bash: |
               aks_kube_config=$(cat $(Pipeline.Workspace)/variables/aks_kube_config)
-              cat $aks_kube_config > $(tf_k8s_path)/kube_config
-              
+              echo $aks_kube_config
+              echo "$aks_kube_config" > $(tf_k8s_path)/kube_config              
             displayName: Set artifacts to variables
 
           # Print config file content
