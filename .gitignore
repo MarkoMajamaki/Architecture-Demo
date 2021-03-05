@@ -27,3 +27,5 @@ deployment/azure/k8s/.terraform/
 deployment/azure/k8s/.terraform.lock.hcl
 deployment/azure/k8s/tfplan
 deployment/azure/k8s/kube_config
+deployment/tls.crt
+deployment/tls.key

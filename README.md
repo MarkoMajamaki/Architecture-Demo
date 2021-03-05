@@ -1,4 +1,4 @@
-# Architecture demo for kubernetes ASP.NET project
+# Architecture demo for Kubernetes ASP.NET project
 
 This is ASP.NET Kubernetes demo for training and learning. **Repo is still under heavy development and some features might not working!**
 
@@ -9,6 +9,7 @@ Used technologies:
 * Kubernetes
 * Helm
 * Azure
+* Azure Devops CI/CD
 * Terraform
 * Minikube
 * RabbitMq
