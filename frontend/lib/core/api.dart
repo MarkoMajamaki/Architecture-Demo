@@ -22,22 +22,15 @@ class API {
   /// API base address based on current enviroment
   ///
   static String get baseUrl {
-    if (enviroment == Enviroments.Development) {
-      // Minikube
-      /*if (Platform.isAndroid) {
-        return "192.168.64.7";
-      } else {
-        return "https://architecture-demo.info";
-      }*/
-
-      // Kind
+    try {
       if (Platform.isAndroid) {
-        return "127.0.0.1";
+        return "https://10.0.2.2";
       } else {
         return "https://localhost";
       }
-    } else {
-      throw new Exception();
+    } catch (e) {
+      // Exception is thrown if platform is web
+      return "https://localhost";
     }
   }
 }

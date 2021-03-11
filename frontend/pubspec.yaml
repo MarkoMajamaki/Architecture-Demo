@@ -17,7 +17,7 @@ dependencies:
   flutkit: ^0.0.1
   get_it: ^5.0.1
   provider: ^4.3.2+2
-  http: ^0.12.2
+  http: ^0.13.0
   flutter_guid: ^0.1.0
 
 dev_dependencies:

@@ -21,14 +21,8 @@ deploy()
     kind load docker-image rabbitmq:3.8-management --name architecture-demo-cluster
     kind load docker-image mcr.microsoft.com/mssql/server:latest --name architecture-demo-cluster
 
-    # Create self signed sertificate
-	openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout deployment/tls.key -out deployment/tls.crt -subj "/CN=architecture-demo.info" -days 365
-
     # Add namespace
     kubectl apply -f deployment/common/namespace.yaml 
-
-    # Add ingress sertificate to that namespace
-    kubectl create secret tls ingress-tls-secret --cert=deployment/tls.crt --key=deployment/tls.key -n architecture-demo
 
     # Deploy ingress controller
     kubectl apply --filename https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml

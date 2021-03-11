@@ -19,9 +19,6 @@ class _CustomersViewState extends State<CustomersView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _createCustomersListWidget(),
-      /*body: Center(
-        child: Text("Order"),
-      ),*/
     );
   }
 
