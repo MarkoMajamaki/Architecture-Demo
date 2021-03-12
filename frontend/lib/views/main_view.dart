@@ -12,7 +12,7 @@ import 'package:frontend/widgets/side_menu_widget.dart';
 
 class MainView extends StatefulWidget {
   static String route = "MainView";
-  MainView({Key key}) : super(key: key);
+  MainView({Key? key}) : super(key: key);
 
   @override
   _MainViewState createState() => _MainViewState();
@@ -42,7 +42,7 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       body: _content(),
       bottomNavigationBar: BottomMenuWidget(
-        onMainTabSelected: _onMainTabSelected,
+        _onMainTabSelected,
       ),
     );
   }
@@ -61,7 +61,7 @@ class _MainViewState extends State<MainView> {
       verticalSeparatorThickness: 1,
       verticalSeparatorColor: Colors.black12,
       menu: SideMenuWidget(
-        onMainTabSelected: _onMainTabSelected,
+        _onMainTabSelected,
       ),
       content: _content(),
     );

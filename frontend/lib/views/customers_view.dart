@@ -6,7 +6,7 @@ import 'package:frontend/viewmodels/customers_viewmodel.dart';
 
 class CustomersView extends StatefulWidget {
   static String route = "CustomersView";
-  CustomersView({Key key}) : super(key: key);
+  CustomersView({Key? key}) : super(key: key);
 
   @override
   _CustomersViewState createState() => _CustomersViewState();
@@ -28,9 +28,10 @@ class _CustomersViewState extends State<CustomersView> {
       builder: (BuildContext build, AsyncSnapshot<List<Customer>> snap) {
         if (snap.hasData) {
           return ListView.builder(
-            itemCount: snap.data.length,
+            itemCount: snap.data!.length,
             itemBuilder: (context, index) {
-              return _createCustomerWidget(snap.data[index]);
+              Navigator.of(context).canPop();
+              return _createCustomerWidget(snap.data![index]);
             },
           );
         } else {

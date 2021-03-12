@@ -10,7 +10,7 @@ class NavigationService {
   /// Navigate to new screen
   ///
   Future<dynamic> navigate(String routeName, {dynamic arguments}) {
-    return _navigatorKey.currentState
+    return _navigatorKey.currentState!
         .pushNamed(routeName, arguments: arguments);
   }
 
@@ -18,14 +18,14 @@ class NavigationService {
   /// Navigate to previous screen
   ///
   void goBack({dynamic arguments}) {
-    return _navigatorKey.currentState.pop(arguments);
+    return _navigatorKey.currentState!.pop(arguments);
   }
 
   ///
   /// Could navigate back
   ///
   Future<bool> canGoBack() {
-    return _navigatorKey.currentState.maybePop();
+    return _navigatorKey.currentState!.maybePop();
   }
 
   ///

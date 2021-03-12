@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_guid/flutter_guid.dart';
+import 'package:frontend/core/guid.dart';
 import 'package:frontend/core/api.dart';
 import 'package:frontend/models/customer.dart';
 import 'package:http/io_client.dart';

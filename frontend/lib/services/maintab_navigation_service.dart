@@ -19,7 +19,7 @@ class MainTabNavigationService {
   ///
   Future<dynamic> navigate(String routeName, {dynamic arguments}) {
     return _mainTabNavigatorKeys[selectedMainTabIndex]
-        .currentState
+        .currentState!
         .pushNamed(routeName, arguments: arguments);
   }
 
@@ -28,7 +28,7 @@ class MainTabNavigationService {
   ///
   void goBack({dynamic arguments}) {
     return _mainTabNavigatorKeys[selectedMainTabIndex]
-        .currentState
+        .currentState!
         .pop(arguments);
   }
 
@@ -36,7 +36,7 @@ class MainTabNavigationService {
   /// Could navigate back
   ///
   Future<bool> canGoBack() {
-    return _mainTabNavigatorKeys[selectedMainTabIndex].currentState.maybePop();
+    return _mainTabNavigatorKeys[selectedMainTabIndex].currentState!.maybePop();
   }
 
   ///

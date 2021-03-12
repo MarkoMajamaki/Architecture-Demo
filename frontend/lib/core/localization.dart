@@ -15,17 +15,17 @@ class Localization {
   static const LocalizationsDelegate<Localization> delegate =
       _LocalizationDelegate();
 
-  static Localization get instance => _LocalizationDelegate.instance;
+  static Localization? get instance => _LocalizationDelegate.instance;
 
   ///
   /// Helper method to keep the code in the widgets concise Localizations are
   /// accessed using an InheritedWidget "of" syntax
   ///
-  static Localization of(BuildContext context) {
+  static Localization? of(BuildContext context) {
     return Localizations.of<Localization>(context, Localization);
   }
 
-  Map<String, String> _localizedStrings;
+  Map<String, String>? _localizedStrings;
 
   ///
   /// Cache the language JSON file from the "lang" folder
@@ -46,7 +46,17 @@ class Localization {
   /// This method will be called from every widget which needs a localized text
   ///
   String translate(String key) {
-    return _localizedStrings[key];
+    if (_localizedStrings == null) {
+      throw new Exception("Language JSON files load is not ready or started!");
+    }
+
+    String? translate = _localizedStrings![key];
+
+    if (translate == null) {
+      throw new Exception("Translate for key ($key) not found");
+    } else {
+      return translate;
+    }
   }
 }
 
@@ -59,7 +69,7 @@ class _LocalizationDelegate extends LocalizationsDelegate<Localization> {
   // It can provide a constant constructor.
   const _LocalizationDelegate();
 
-  static Localization instance;
+  static Localization? instance;
 
   @override
   bool isSupported(Locale locale) {
@@ -88,6 +98,6 @@ class _LocalizationDelegate extends LocalizationsDelegate<Localization> {
 ///
 extension StringExtension on String {
   String localize() {
-    return Localization.instance.translate(this);
+    return Localization.instance!.translate(this);
   }
 }

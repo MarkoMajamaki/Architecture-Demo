@@ -1,4 +1,4 @@
-import 'package:flutter_guid/flutter_guid.dart';
+import 'package:frontend/core/guid.dart';
 
 class Customer {
   final Guid id;
@@ -7,7 +7,7 @@ class Customer {
   final DateTime birthday;
   final int age;
 
-  Customer({this.id, this.firstName, this.lastName, this.birthday, this.age});
+  Customer(this.id, this.firstName, this.lastName, this.birthday, this.age);
 
   Customer.fromJson(Map<String, dynamic> json)
       : id = Guid(json['id']),

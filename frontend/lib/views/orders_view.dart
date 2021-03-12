@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 class OrdersView extends StatefulWidget {
   static String route = "OrdersView";
-  OrdersView({Key key}) : super(key: key);
+  OrdersView({Key? key}) : super(key: key);
 
   @override
   _OrdersViewState createState() => _OrdersViewState();

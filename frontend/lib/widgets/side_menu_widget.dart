@@ -5,7 +5,7 @@ import 'package:frontend/core/localization.dart';
 class SideMenuWidget extends StatefulWidget {
   final Function onMainTabSelected;
 
-  SideMenuWidget({Key key, this.onMainTabSelected}) : super(key: key);
+  SideMenuWidget(this.onMainTabSelected, {Key? key}) : super(key: key);
 
   @override
   _SideMenuWidgetState createState() => _SideMenuWidgetState();

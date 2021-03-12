@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 class CustomerView extends StatefulWidget {
   static String route = "CustomerView";
-  CustomerView({Key key}) : super(key: key);
+  CustomerView({Key? key}) : super(key: key);
 
   @override
   _CustomerViewState createState() => _CustomerViewState();
