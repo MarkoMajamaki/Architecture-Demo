@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-api-deployment
+  namespace: architecture-demo
+spec:
+  selector:
+    matchLabels:
+      app: auth-api-pod
+  template:
+    metadata:
+      labels:
+        app: auth-api-pod
+    spec:
+      containers:
+      - name: auth-api-container
+        image: architecture_demo/auth-api:v1
+        env:
+          - name: DatabaseServer
+            value: "sqlserver-service"
+          - name: DatabaseName
+            value: "auth-db"
+          - name: DatabasePort
+            value: "1433"
+          - name: DatabaseUser
+            value: "sa"
+          - name: DatabasePassword
+            valueFrom:
+              secretKeyRef:
+                name: architecture-demo-secrets
+                key: SA_PASSWORD     
+          - name: RabbitMq__HostName 
+            value: "rabbitmq.architecture-demo.svc.cluster.local"
+          - name: RabbitMq__Port
+            value: "5672"
+          - name: RabbitMq__UserName
+            value: "guest"
+          - name: RabbitMq__Password
+            value: "guest"
+          - name: RabbitMq__QueueName 
+            value: "TestQueue"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-api-service
+  namespace: architecture-demo
+spec:
+  type: ClusterIP
+  selector:
+    app: auth-api-pod
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

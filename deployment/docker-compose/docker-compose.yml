@@ -67,6 +67,23 @@ services:
     ports:
       - "8003:80"
 
+  authapi:
+    image: architecture_demo/auth-api:v1
+    container_name: authapi
+    restart: on-failure   
+    build:
+      # target: debug
+      context: ../../backend/AuthApi
+      dockerfile: Dockerfile
+    depends_on: 
+      - sqlserver
+    environment: 
+      DatabaseName: "auth-db"
+    env_file: 
+      - ./sqlserver.env
+    ports:
+      - "8004:80"
+
   nginx: 
     image: nginx:latest
     container_name: nginx_gateway
@@ -75,6 +92,7 @@ services:
     depends_on: 
       - customerapi
       - orderapi
+      - authapi
       - frontend
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf

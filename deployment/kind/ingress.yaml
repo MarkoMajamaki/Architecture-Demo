@@ -20,6 +20,13 @@ spec:
               name: frontend-service
               port:
                 number: 80
+        - path: /auth-api/(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: auth-api-service
+              port:
+                number: 80
         - path: /customer-api/(.*)
           pathType: Prefix
           backend:

@@ -11,10 +11,12 @@ deploy()
 
 	dotnet build backend/CustomerApi/CustomerApi
 	dotnet build backend/OrderApi/OrderApi
+	dotnet build backend/AuthApi/AuthApi
 	cd frontend && flutter build web && cd ..
 
 	eval $(minikube docker-env)
 
+	docker build -t architecture_demo/auth-api:v1 backend/AuthApi/
 	docker build -t architecture_demo/order-api:v1 backend/OrderApi/
 	docker build -t architecture_demo/customer-api:v1 backend/CustomerApi/
 	docker build -t architecture_demo/frontend:v1 frontend/
@@ -38,6 +40,7 @@ deploy()
 	# Apply common services
 	kubectl apply -f deployment/common/namespace.yaml 
 	kubectl apply -f deployment/common/sqlserver-deployment.yaml 
+	kubectl apply -f deployment/common/auth-api-deployment.yaml
 	kubectl apply -f deployment/common/customer-api-deployment.yaml
 	kubectl apply -f deployment/common/order-api-deployment.yaml
 	kubectl apply -f deployment/common/frontend-deployment.yaml

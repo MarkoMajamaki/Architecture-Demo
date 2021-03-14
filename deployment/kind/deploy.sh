@@ -2,8 +2,10 @@ deploy()
 {
 	dotnet build backend/CustomerApi/CustomerApi
 	dotnet build backend/OrderApi/OrderApi
+	dotnet build backend/AuthApi/AuthApi
 	cd frontend && flutter build web && cd ..
 
+	docker build -t architecture_demo/auth-api:v1 backend/AuthApi/
 	docker build -t architecture_demo/order-api:v1 backend/OrderApi/
 	docker build -t architecture_demo/customer-api:v1 backend/CustomerApi/
 	docker build -t architecture_demo/frontend:v1 frontend/
@@ -15,6 +17,7 @@ deploy()
     kind create cluster --name architecture-demo-cluster --config deployment/kind/kind.config
 
     # Load images to cluster
+    kind load docker-image architecture_demo/auth-api:v1 --name architecture-demo-cluster
     kind load docker-image architecture_demo/customer-api:v1 --name architecture-demo-cluster
     kind load docker-image architecture_demo/order-api:v1 --name architecture-demo-cluster
     kind load docker-image architecture_demo/frontend:v1 --name architecture-demo-cluster
