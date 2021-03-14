@@ -39,11 +39,12 @@ deploy()
 
 	# Apply common services
 	kubectl apply -f deployment/common/namespace.yaml 
-	kubectl apply -f deployment/common/sqlserver-deployment.yaml 
-	kubectl apply -f deployment/common/auth-api-deployment.yaml
-	kubectl apply -f deployment/common/customer-api-deployment.yaml
-	kubectl apply -f deployment/common/order-api-deployment.yaml
-	kubectl apply -f deployment/common/frontend-deployment.yaml
+	kubectl apply -f deployment/common/rabbitmq-config.yaml 
+	kubectl apply -f deployment/common/sqlserver.yaml 
+	kubectl apply -f deployment/common/auth-api.yaml
+	kubectl apply -f deployment/common/customer-api.yaml
+	kubectl apply -f deployment/common/order-api.yaml
+	kubectl apply -f deployment/common/frontend.yaml
 
 	# Add RabbitMQ	
     helm repo add bitnami https://charts.bitnami.com/bitnami

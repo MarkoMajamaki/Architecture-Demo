@@ -17,28 +17,28 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: frontend-service
+              name: frontend
               port:
                 number: 80
         - path: /auth-api/(.*)
           pathType: Prefix
           backend:
             service:
-              name: auth-api-service
+              name: auth-api
               port:
                 number: 80
         - path: /customer-api/(.*)
           pathType: Prefix
           backend:
             service:
-              name: customer-api-service
+              name: customer-api
               port:
                 number: 80
         - path: /order-api/(.*)
           pathType: Prefix
           backend:
             service:
-              name: order-api-service
+              name: order-api
               port:
                 number: 80                 
 ---

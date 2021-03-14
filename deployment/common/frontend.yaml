@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deployment
+  name: frontend
   namespace: architecture-demo
 spec:
   selector:
     matchLabels:
-      app: frontend-pod
+      app: frontend
   template:
     metadata:
       labels:
-        app: frontend-pod
+        app: frontend
     spec:
       containers:
-      - name: frontend-container
+      - name: frontend
         image: architecture_demo/frontend:v1
         resources:
           limits:
@@ -25,12 +25,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-service
+  name: frontend
   namespace: architecture-demo
 spec:
   type: ClusterIP
   selector:
-    app: frontend-pod
+    app: frontend
   ports:
   - protocol: TCP
     port: 80

@@ -1,11 +1,3 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: architecture-demo-secrets
-  namespace: architecture-demo
-stringData:
-  SA_PASSWORD: mssQlp4ssword#
----
 apiVersion: apps/v1
 kind: Deployment
 metadata: 
@@ -14,15 +6,15 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app: sqlserver-pod
+      app: sqlserver
   replicas: 1
   template:
     metadata:
       labels:
-        app: sqlserver-pod
+        app: sqlserver
     spec:
       containers:
-      - name: sqlserver-container
+      - name: sqlserver
         image: mcr.microsoft.com/mssql/server:2019-latest
         ports:
         - containerPort: 1433
@@ -35,10 +27,14 @@ spec:
         - name: "SA_PASSWORD"
           valueFrom:
             secretKeyRef:
-              name: architecture-demo-secrets
+              name: sqlserver-secrets
               key: SA_PASSWORD 
         - name: "MSSQL_PID"
           value: "Developer"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
       volumes:
       - name: sqldata-storage
         persistentVolumeClaim:
@@ -47,13 +43,31 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: sqlserver-service
+  name: sqlserver
   namespace: architecture-demo
 spec:
   selector:
-    app: sqlserver-pod
+    app: sqlserver
   type: ClusterIP
   ports:
   - protocol: TCP
     port: 1433
     targetPort: 1433
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sqlserver-secrets
+  namespace: architecture-demo
+stringData:
+  SA_PASSWORD: mssQlp4ssword#
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sqlserver-config
+  namespace: architecture-demo
+data:
+  DatabaseServer: sqlserver
+  DatabasePort: "1433"
+  DatabaseUser: sa
