@@ -16,9 +16,9 @@ spec:
       - name: customer-api
         image: architecture_demo/customer-api:v1
         env:
-        - name: DatabaseName
+        - name: Database__Name
           value: "customer-db"
-        - name: DatabasePassword
+        - name: Database__Password
           valueFrom:
             secretKeyRef:
               name: sqlserver-secrets

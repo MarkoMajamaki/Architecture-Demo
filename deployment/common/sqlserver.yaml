@@ -68,6 +68,6 @@ metadata:
   name: sqlserver-config
   namespace: architecture-demo
 data:
-  DatabaseServer: sqlserver
-  DatabasePort: "1433"
-  DatabaseUser: sa
+  Database__Server: sqlserver
+  Database__Port: "1433"
+  Database__User: sa

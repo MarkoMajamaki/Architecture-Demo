@@ -19,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
+using Shared;
 using AuthApi.Domain;
 using AuthApi.Application;
 using AuthApi.Infrastructure;
@@ -46,20 +47,12 @@ namespace AuthApi
 
             services.AddHttpClient();
             services.AddScoped<IFacebookAuthenticationService, FacebookAuthenticationService>();
+            services.Configure<FacebookAuthSettings>(Configuration.GetSection("FacebookAuth"));  
 
-            services.AddSingleton<IFacebookAuthSettings>(x 
-                => new FacebookAuthSettings(
-                    Configuration["Authentication:Facebook:AppId"], 
-                    Configuration["Authentication:Facebook:AppSecret"]));
-
-            string server = Configuration["DatabaseServer"] ?? "localhost";
-            string port = Configuration["DatabasePort"] ?? "1433";
-            string user = Configuration["DatabaseUser"] ?? "sa";
-            string password = Configuration["DatabasePassword"] ?? "mssQlp4ssword#";
-            string database = Configuration["DatabaseName"] ?? "auth";
-
-            string connectionString = $"Server={server},{port};Initial Catalog={database};User={user};Password={password}";
-
+            DatabaseConfiguration dbSettings = Configuration.GetSection("Database").Get<DatabaseConfiguration>();
+            string connectionString = $"Server={dbSettings.Server},{dbSettings.Port};Initial Catalog={dbSettings.Name};User={dbSettings.User};Password={dbSettings.Password}";
+            
+            // Debug
             System.Console.WriteLine(connectionString);
 
             // For Entity Framework  
@@ -70,9 +63,8 @@ namespace AuthApi
                 .AddEntityFrameworkStores<AuthContext>()  
                 .AddDefaultTokenProviders();  
   
-            string validAudience = Configuration["JWT:ValidAudience"];
-            string validIssuer = Configuration["JWT:ValidIssuer"];
-            string secret = Configuration["JWT:Secret"];
+            JwtSettings jwtSettings = Configuration.GetSection("JWT").Get<JwtSettings>();
+            FacebookAuthSettings facebookAuth = Configuration.GetSection("FacebookAuth").Get<FacebookAuthSettings>();
 
             // Adding Authentication  c
             services.AddAuthentication(options =>  
@@ -82,8 +74,8 @@ namespace AuthApi
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
             }).AddFacebook(facebookOptions => 
             {
-                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                facebookOptions.AppId = facebookAuth.AppId;
+                facebookOptions.AppSecret = facebookAuth.AppSecret;
             })
             // Adding Jwt Bearer  
             .AddJwtBearer(options =>  
@@ -94,9 +86,9 @@ namespace AuthApi
                 {  
                     ValidateIssuer = true,  
                     ValidateAudience = true,  
-                    ValidAudience = validAudience,  
-                    ValidIssuer = validIssuer,  
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))  
+                    ValidAudience = jwtSettings.ValidAudience,  
+                    ValidIssuer = jwtSettings.ValidIssuer,  
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret))  
                 };  
             }); 
             services.AddSwaggerGen(c =>

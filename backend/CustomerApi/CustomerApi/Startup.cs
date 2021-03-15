@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
+using Shared;
 using CustomerApi.Application;
 using CustomerApi.Domain;
 using CustomerApi.Infrastructure;
@@ -42,13 +43,11 @@ namespace CustomerApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomerApi", Version = "v1" });
             });
 
-            string server = Configuration["DatabaseServer"] ?? "localhost";
-            string port = Configuration["DatabasePort"] ?? "1433";
-            string user = Configuration["DatabaseUser"] ?? "sa";
-            string password = Configuration["DatabasePassword"] ?? "mssQlp4ssword#";
-            string database = Configuration["DatabaseName"] ?? "customer";
-
-            string connectionString = $"Server={server},{port};Initial Catalog={database};User={user};Password={password}";
+            DatabaseConfiguration dbSettings = Configuration.GetSection("Database").Get<DatabaseConfiguration>();
+            string connectionString = $"Server={dbSettings.Server},{dbSettings.Port};Initial Catalog={dbSettings.Name};User={dbSettings.User};Password={dbSettings.Password}";
+            
+            // Debug
+            System.Console.WriteLine(connectionString);
 
             // For Entity Framework  
             services.AddDbContext<CustomerContext>(options => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("CustomerApi.Infrastructure")));

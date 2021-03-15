@@ -1,0 +1,22 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "RabbitMq": {
+    "HostName": "rabbitmq.architecture-demo.svc.cluster.local",
+    "Port": "5672",
+    "UserName": "guest",
+    "Password": "guest",
+    "QueueName": "TestQueue"
+  },
+  "Database": {
+    "Server": "sqlserver",
+    "Port": "1433",
+    "User": "sa",
+    "Password": "mssQlp4ssword#"
+  }
+}

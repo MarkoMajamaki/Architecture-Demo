@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F66E15F7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthApi.Application.Test", "AuthApi\Tests\AuthApi.Application.Test\AuthApi.Application.Test.csproj", "{C12F0103-CC0F-4E13-AB61-F819D9E790C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{5C47D281-81E3-4366-ACFE-65D9F467F73F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -238,6 +240,18 @@ Global
 		{C12F0103-CC0F-4E13-AB61-F819D9E790C7}.Release|x64.Build.0 = Release|Any CPU
 		{C12F0103-CC0F-4E13-AB61-F819D9E790C7}.Release|x86.ActiveCfg = Release|Any CPU
 		{C12F0103-CC0F-4E13-AB61-F819D9E790C7}.Release|x86.Build.0 = Release|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Debug|x64.Build.0 = Debug|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Debug|x86.Build.0 = Debug|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Release|x64.ActiveCfg = Release|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Release|x64.Build.0 = Release|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Release|x86.ActiveCfg = Release|Any CPU
+		{5C47D281-81E3-4366-ACFE-65D9F467F73F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{34ED2EFC-C8F1-42C7-BA5B-B7F3D3263D71} = {5EBF41DA-9F09-4BA8-917F-1D5E14CF0763}

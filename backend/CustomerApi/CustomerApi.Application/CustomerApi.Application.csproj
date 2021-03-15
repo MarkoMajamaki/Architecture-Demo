@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CustomerApi.Domain\CustomerApi.Domain.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

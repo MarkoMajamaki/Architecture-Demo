@@ -1,4 +1,4 @@
-namespace OrderApi.Application
+namespace Shared
 {
     public class RabbitMqConfiguration
     {

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OrderApi.Domain\OrderApi.Domain.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

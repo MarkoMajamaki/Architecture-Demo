@@ -1,7 +1,8 @@
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace AuthApi.Application
 {
@@ -18,14 +19,14 @@ namespace AuthApi.Application
         private const string _userInfoUrl = 
             "https://graph.facebook.com/me?fields=first_name,last_name,picture,email&access_token={0}";
 
-        private IFacebookAuthSettings _facebookAuthSettings;
+        private FacebookAuthSettings _facebookAuthSettings;
         public IHttpClientFactory _httpClientFactory;
 
         public FacebookAuthenticationService(
-            IFacebookAuthSettings facebookAuthSettings,
+            IOptions<FacebookAuthSettings> facebookAuthSettings,
             IHttpClientFactory httpClientFactory)
         {
-            _facebookAuthSettings = facebookAuthSettings;
+            _facebookAuthSettings = facebookAuthSettings.Value;
             _httpClientFactory = httpClientFactory;
         }
 

@@ -5,6 +5,8 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 
+using Shared;
+
 // Copy from: https://www.programmingwithwolfgang.com/rabbitmq-in-an-asp-net-core-3-1-microservice/
 
 namespace CustomerApi.Application

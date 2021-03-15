@@ -17,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using OrderApi.Application;
 using OrderApi.Domain;
 using OrderApi.Infrastructure;
+using Shared;
 
 namespace OrderApi
 {
@@ -42,13 +43,11 @@ namespace OrderApi
 
             services.AddHostedService<CustomerUpdateReceiver>();
 
-            String server = Configuration["DatabaseServer"] ?? "localhost";
-            string port = Configuration["DatabasePort"] ?? "1433";
-            string user = Configuration["DatabaseUser"] ?? "sa";
-            string password = Configuration["DatabasePassword"] ?? "mssQlp4ssword#";
-            string database = Configuration["DatabaseName"] ?? "order";
-
-            string connectionString = $"Server={server},{port};Initial Catalog={database};User={user};Password={password}";
+            DatabaseConfiguration dbSettings = Configuration.GetSection("Database").Get<DatabaseConfiguration>();
+            string connectionString = $"Server={dbSettings.Server},{dbSettings.Port};Initial Catalog={dbSettings.Name};User={dbSettings.User};Password={dbSettings.Password}";
+            
+            // Debug
+            System.Console.WriteLine(connectionString);
 
             // For Entity Framework  
             services.AddDbContext<OrderContext>(options => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("OrderApi.Infrastructure")));

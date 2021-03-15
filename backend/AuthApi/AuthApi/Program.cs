@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -27,9 +28,17 @@ namespace AuthApi
             return Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingcontext, config) =>
                 {
+                    var env = hostingcontext.HostingEnvironment;
+
+                    // find the shared folder in the parent folder
+                    var sharedFolder = Path.Combine(env.ContentRootPath, "../..", "Shared");
+
                     config
+                    .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)
+                    .AddJsonFile(Path.Combine(sharedFolder, $"sharedsettings.{env.EnvironmentName}.json"), optional: true)
                     .AddJsonFile("appsettings.json", false, true)
-                    .AddJsonFile($"appsettings.{hostingcontext.HostingEnvironment.EnvironmentName}.json", true, true);
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
+                    .AddEnvironmentVariables();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

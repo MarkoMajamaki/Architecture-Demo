@@ -40,3 +40,5 @@ deployment/azure/k8s/tfplan
 deployment/azure/k8s/kube_config
 deployment/tls.crt
 deployment/tls.key
+backend/Shared/obj/
+backend/Shared/bin/

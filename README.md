@@ -18,6 +18,7 @@ Used technologies:
 * CQRS
 * MediatR
 * Swager
+* OAuth
 * Clean architecture
 
 ## Deployment with docker-compose

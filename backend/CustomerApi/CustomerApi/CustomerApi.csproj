@@ -20,6 +20,7 @@
     <ProjectReference Include="..\CustomerApi.Application\CustomerApi.Application.csproj" />
     <ProjectReference Include="..\CustomerApi.Infrastructure\CustomerApi.Infrastructure.csproj" />
     <ProjectReference Include="..\CustomerApi.Domain\CustomerApi.Domain.csproj" />
+    <ProjectReference Include="..\..\Shared\Shared.csproj" />
   </ItemGroup>
 
 </Project>
