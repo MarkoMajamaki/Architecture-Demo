@@ -5,9 +5,9 @@ deploy()
 	dotnet build backend/AuthApi/AuthApi
 	cd frontend && flutter build web && cd ..
 
-	docker build -t architecture_demo/auth-api:v1 backend/AuthApi/
-	docker build -t architecture_demo/order-api:v1 backend/OrderApi/
-	docker build -t architecture_demo/customer-api:v1 backend/CustomerApi/
+    docker build -f backend/AuthApi/Dockerfile -t architecture_demo/auth-api:v1 backend/
+    docker build -f backend/OrderApi/Dockerfile -t architecture_demo/order-api:v1 backend/
+    docker build -f backend/CustomerApi/Dockerfile -t architecture_demo/customer-api:v1 backend/	
 	docker build -t architecture_demo/frontend:v1 frontend/
 
 	docker pull rabbitmq:3.8-management
@@ -40,9 +40,9 @@ deploy()
     kubectl apply -f deployment/kind/sqlserver-pvc.yaml 
 
     # Deploy common services
-	kubectl apply -f deployment/common/namespace.yaml 
 	kubectl apply -f deployment/common/rabbitmq-config.yaml 
 	kubectl apply -f deployment/common/sqlserver.yaml 
+	kubectl apply -f deployment/common/auth-api.yaml
 	kubectl apply -f deployment/common/customer-api.yaml
 	kubectl apply -f deployment/common/order-api.yaml
 	kubectl apply -f deployment/common/frontend.yaml

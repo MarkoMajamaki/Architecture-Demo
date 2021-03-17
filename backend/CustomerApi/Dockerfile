@@ -4,12 +4,14 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
 WORKDIR /src
-COPY ["CustomerApi/CustomerApi.csproj", "CustomerApi/CustomerApi/"]
-COPY ["CustomerApi.Application/CustomerApi.Application.csproj", "CustomerApi/CustomerApi.Application/"]
-COPY ["CustomerApi.Domain/CustomerApi.Domain.csproj", "CustomerApi/CustomerApi.Domain/"]
-COPY ["CustomerApi.Infrastructure/CustomerApi.Infrastructure.csproj", "CustomerApi/CustomerApi.Infrastructure/"]
+COPY ["CustomerApi/CustomerApi/CustomerApi.csproj", "CustomerApi/CustomerApi/"]
+COPY ["CustomerApi/CustomerApi.Application/CustomerApi.Application.csproj", "CustomerApi/CustomerApi.Application/"]
+COPY ["CustomerApi/CustomerApi.Domain/CustomerApi.Domain.csproj", "CustomerApi/CustomerApi.Domain/"]
+COPY ["CustomerApi/CustomerApi.Infrastructure/CustomerApi.Infrastructure.csproj", "CustomerApi/CustomerApi.Infrastructure/"]
+COPY ["/Shared/Shared.csproj", "Shared/"]
 RUN dotnet restore "CustomerApi/CustomerApi/CustomerApi.csproj"
-COPY . "CustomerApi/"
+COPY "CustomerApi/" "CustomerApi/"
+COPY "Shared/" "Shared/"
 WORKDIR "/src/CustomerApi/CustomerApi/"
 RUN dotnet build "CustomerApi.csproj" -c Release -o /app/build
 FROM build AS publish
