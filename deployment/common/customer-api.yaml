@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: architecture_demo/customer-api
+  name: customer-api
   namespace: architecture-demo
 spec:
   selector:
@@ -25,9 +25,9 @@ spec:
               key: SA_PASSWORD     
         envFrom:
         - configMapRef:
-          name: sqlserver-config
+            name: sqlserver-config
         - configMapRef:
-          name: rabbitmq-config
+            name: rabbitmq-connection-config
         resources:
           limits:
             memory: "128Mi"

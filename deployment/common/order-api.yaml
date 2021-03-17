@@ -16,18 +16,18 @@ spec:
       - name: order-api
         image: architecture_demo/order-api:v1
         env:
-        - name: DatabaseName
+        - name: Database__Name
           value: "order-db"
-        - name: DatabasePassword
+        - name: Database__Password
           valueFrom:
             secretKeyRef:
               name: sqlserver-secrets
               key: SA_PASSWORD     
         envFrom:
         - configMapRef:
-          name: sqlserver-config
+            name: sqlserver-config
         - configMapRef:
-          name: rabbitmq-config
+            name: rabbitmq-connection-config
         resources:
           limits:
             memory: "128Mi"

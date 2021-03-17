@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: rabbitmq-config
+  name: rabbitmq-connection-config
   namespace: architecture-demo
 data:
   RabbitMq__HostName: "rabbitmq.architecture-demo.svc.cluster.local"
