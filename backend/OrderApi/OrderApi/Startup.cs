@@ -46,9 +46,6 @@ namespace OrderApi
             DatabaseConfiguration dbSettings = Configuration.GetSection("Database").Get<DatabaseConfiguration>();
             string connectionString = $"Server={dbSettings.Server},{dbSettings.Port};Initial Catalog={dbSettings.Name};User={dbSettings.User};Password={dbSettings.Password}";
             
-            // Debug
-            System.Console.WriteLine(connectionString);
-
             // For Entity Framework  
             services.AddDbContext<OrderContext>(options => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("OrderApi.Infrastructure")));
 
