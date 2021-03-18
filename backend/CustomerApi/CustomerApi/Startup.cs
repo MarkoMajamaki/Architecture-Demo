@@ -43,13 +43,13 @@ namespace CustomerApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomerApi", Version = "v1" });
             });
 
-            DatabaseConfiguration dbSettings = Configuration.GetSection("Database").Get<DatabaseConfiguration>();
+            DatabaseSettings dbSettings = Configuration.GetSection("Database").Get<DatabaseSettings>();
             string connectionString = $"Server={dbSettings.Server},{dbSettings.Port};Initial Catalog={dbSettings.Name};User={dbSettings.User};Password={dbSettings.Password}";
             
             // For Entity Framework  
             services.AddDbContext<CustomerContext>(options => options.UseSqlServer(connectionString, x => x.MigrationsAssembly("CustomerApi.Infrastructure")));
 
-            services.Configure<RabbitMqConfiguration>(Configuration.GetSection("RabbitMq"));  
+            services.Configure<RabbitMqSettings>(Configuration.GetSection("RabbitMq"));  
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));

@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\Shared.csproj" />
     <ProjectReference Include="..\AuthApi.Application\AuthApi.Application.csproj" />
     <ProjectReference Include="..\AuthApi.Infrastructure\AuthApi.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Shared\Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

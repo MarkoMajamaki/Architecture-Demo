@@ -18,10 +18,10 @@ namespace CustomerApi.Application
 
     public class CustomerUpdateSender : ICustomerUpdateSender
     {
-        private RabbitMqConfiguration _rabbitMqOptions;
+        private RabbitMqSettings _rabbitMqOptions;
         private IConnection _connection;
 
-        public CustomerUpdateSender(IOptions<RabbitMqConfiguration> rabbitMqOptions)
+        public CustomerUpdateSender(IOptions<RabbitMqSettings> rabbitMqOptions)
         {
             _rabbitMqOptions = rabbitMqOptions.Value;
             CreateConnection();

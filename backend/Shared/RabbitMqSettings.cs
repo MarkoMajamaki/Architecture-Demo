@@ -1,6 +1,6 @@
 namespace Shared
 {
-    public class RabbitMqConfiguration
+    public class RabbitMqSettings
     {
         public string HostName { get; set; }
 

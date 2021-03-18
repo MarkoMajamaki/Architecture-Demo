@@ -49,7 +49,7 @@ namespace AuthApi
             services.AddScoped<IFacebookAuthenticationService, FacebookAuthenticationService>();
             services.Configure<FacebookAuthSettings>(Configuration.GetSection("FacebookAuth"));  
 
-            DatabaseConfiguration dbSettings = Configuration.GetSection("Database").Get<DatabaseConfiguration>();
+            DatabaseSettings dbSettings = Configuration.GetSection("Database").Get<DatabaseSettings>();
             string connectionString = $"Server={dbSettings.Server},{dbSettings.Port};Initial Catalog={dbSettings.Name};User={dbSettings.User};Password={dbSettings.Password}";
             
             // For Entity Framework  

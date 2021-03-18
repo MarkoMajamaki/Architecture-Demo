@@ -1,6 +1,6 @@
 namespace Shared
 {
-    public class DatabaseConfiguration
+    public class DatabaseSettings
     {
         public string Server { get; set; }
 

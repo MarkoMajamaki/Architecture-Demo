@@ -14,6 +14,18 @@ using AuthApi.Domain;
 
 namespace AuthApi.Application
 {
+    public class LoginCommand : IRequest<JwtSecurityToken>
+    {
+        public string Username { get; private set; }    
+        public string Password { get; private set; }  
+
+        public LoginCommand(string userName, string password)
+        {
+            Username = userName;
+            Password = password;
+        }
+    }
+    
     public interface ILoginCommandHandler : IRequestHandler<LoginCommand, JwtSecurityToken>
     {
     }

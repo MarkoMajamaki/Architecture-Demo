@@ -16,12 +16,12 @@ namespace OrderApi.Application
 {
     public class CustomerUpdateReceiver : BackgroundService
     {
-        private readonly RabbitMqConfiguration _rabbitMqConfiguration; 
+        private readonly RabbitMqSettings _rabbitMqConfiguration; 
         private IConnection _connection;
         private IModel _channel;
         private readonly IMediator _mediator;
 
-        public CustomerUpdateReceiver(IMediator mediator, IOptions<RabbitMqConfiguration> rabbitMqOptions)
+        public CustomerUpdateReceiver(IMediator mediator, IOptions<RabbitMqSettings> rabbitMqOptions)
         {
             _rabbitMqConfiguration = rabbitMqOptions.Value;
             _mediator = mediator;
