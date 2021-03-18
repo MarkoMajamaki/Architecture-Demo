@@ -1,5 +1,6 @@
 deploy()
 {
+	cd ../../
 	dotnet build backend/CustomerApi/CustomerApi
 	dotnet build backend/OrderApi/OrderApi
 	dotnet build backend/AuthApi/AuthApi
@@ -14,7 +15,6 @@ deploy()
 
 	cd deployment/docker-compose 
 	docker-compose up
-	cd ../../
 }
 
 destroy()

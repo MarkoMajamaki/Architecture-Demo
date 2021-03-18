@@ -9,6 +9,7 @@ deploy()
 	# Add demo host DNS for debugging (Mac OS)
 	echo "$(minikube ip) architecture-demo.info" | sudo tee -a /etc/hosts
 
+	cd ../../
 	dotnet build backend/CustomerApi/CustomerApi
 	dotnet build backend/OrderApi/OrderApi
 	dotnet build backend/AuthApi/AuthApi
