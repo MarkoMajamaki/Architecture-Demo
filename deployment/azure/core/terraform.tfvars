@@ -1,4 +1,4 @@
-resource_group_name = "architecture_demo_rg"
+resource_group_name = "architecture_demo"
 cluster_name        = "ArchitectureDemoAKS"
 acr_name            = "ArchitectureDemoACR"
 location            = "northeurope"

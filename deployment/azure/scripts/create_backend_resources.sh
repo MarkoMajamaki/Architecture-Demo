@@ -1,10 +1,8 @@
 # Original: https://github.com/jcorioland/terraform-azure-reference/blob/master/scripts/init-remote-state-backend.sh
 
-LOCATION=northeurope
-RESOURCE_GROUP_NAME=architecture_demo_tfstate_rg
-TF_STATE_STORAGE_ACCOUNT_NAME=tfstate000
-TF_STATE_CONTAINER_NAME=tfstate-container
-KEYVAULT_NAME=tfstate-keyvault-000
+set -e
+
+. scripts/init_env_vars.sh
 
 # Create the resource group
 if  ( `az group exists --resource-group $RESOURCE_GROUP_NAME` == "true" );
@@ -17,33 +15,33 @@ else
 fi
 
 # Create the storage account
-if ( `az storage account check-name --name $TF_STATE_STORAGE_ACCOUNT_NAME --query 'nameAvailable'` == "true" );
+if ( `az storage account check-name --name $STORAGE_ACCOUNT_NAME --query 'nameAvailable'` == "true" );
 then
-    echo "Creating $TF_STATE_STORAGE_ACCOUNT_NAME storage account..."
+    echo "Creating $STORAGE_ACCOUNT_NAME storage account..."
     az storage account create \
         -g $RESOURCE_GROUP_NAME \
         -l $LOCATION \
-        --name $TF_STATE_STORAGE_ACCOUNT_NAME \
+        --name $STORAGE_ACCOUNT_NAME \
         --sku Standard_LRS \
         --encryption-services blob
-    echo "Storage account $TF_STATE_STORAGE_ACCOUNT_NAME created."
+    echo "Storage account $STORAGE_ACCOUNT_NAME created."
 else
-    echo "Storage account $TF_STATE_STORAGE_ACCOUNT_NAME exists..."
+    echo "Storage account $STORAGE_ACCOUNT_NAME exists..."
 fi
 
 # Retrieve the storage account key
 echo "Retrieving storage account key..."
-ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name $TF_STATE_STORAGE_ACCOUNT_NAME --query [0].value -o tsv)
+ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name $STORAGE_ACCOUNT_NAME --query [0].value -o tsv)
 echo "Storage account key retrieved."
 
 # Create a storage container (for the Terraform State)
-if ( `az storage container exists --name $TF_STATE_CONTAINER_NAME --account-name $TF_STATE_STORAGE_ACCOUNT_NAME --account-key $ACCOUNT_KEY --query exists` == "true" );
+if ( `az storage container exists --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME --account-key $ACCOUNT_KEY --query exists` == "true" );
 then
-    echo "Storage container $TF_STATE_CONTAINER_NAME exists..."
+    echo "Storage container $CONTAINER_NAME exists..."
 else
-    echo "Creating $TF_STATE_CONTAINER_NAME storage container..."
-    az storage container create --name $TF_STATE_CONTAINER_NAME --account-name $TF_STATE_STORAGE_ACCOUNT_NAME --account-key $ACCOUNT_KEY
-    echo "Storage container $TF_STATE_CONTAINER_NAME created."
+    echo "Creating $CONTAINER_NAME storage container..."
+    az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME --account-key $ACCOUNT_KEY
+    echo "Storage container $CONTAINER_NAME created."
 fi
 
 # Create an Azure KeyVault

@@ -30,8 +30,8 @@ cd backend/AuthApi/AuthApi
 dotnet user-secrets init
 
 # Add secrets for local development
-dotnet user-secrets set "FacebookAuth:AppId" "{Your Facebook AppId}"
-dotnet user-secrets set "FacebookAuth:AppSecret" "{Your Facebook AppSecret}"
+dotnet user-secrets set "FacebookAuth:AppId" "Your Facebook AppId"
+dotnet user-secrets set "FacebookAuth:AppSecret" "Your Facebook AppSecret"
 ```
 
 ## Mirror all RabbitMQ nodes

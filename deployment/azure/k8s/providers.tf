@@ -15,9 +15,9 @@ terraform {
     }
   }
   backend "azurerm" {
-    resource_group_name   = "architecture_demo_tfstate_rg"
-    storage_account_name  = "tfstate000"
-    container_name        = "tfstate-container"
+    resource_group_name   = "architecture_demo_backend"
+    storage_account_name  = "account010"
+    container_name        = "container"
     key                   = "k8s.tfstate"
   }
 }

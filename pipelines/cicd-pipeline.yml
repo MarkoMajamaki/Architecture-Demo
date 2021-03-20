@@ -26,7 +26,7 @@ stages:
         azureSubscription: 'AzureServiceConnection'
         scriptType: 'bash'
         scriptLocation: 'scriptPath'
-        scriptPath: 'deployment/azure/scripts/init_remote_state_backend.sh'
+        scriptPath: 'deployment/azure/scripts/create_backend_resources.sh'
 
     # Install terraform
     - task: TerraformInstaller@0
@@ -42,9 +42,9 @@ stages:
         command: 'init'
         workingDirectory: '$(tf_core_infrastructure_path)'
         backendServiceArm: 'AzureServiceConnection'
-        backendAzureRmResourceGroupName: 'architecture_demo_tfstate_rg'
-        backendAzureRmStorageAccountName: 'tfstate000'
-        backendAzureRmContainerName: 'tfstate-container'
+        backendAzureRmResourceGroupName: 'architecture_demo_backend'
+        backendAzureRmStorageAccountName: 'account010'
+        backendAzureRmContainerName: 'container'
         backendAzureRmKey: 'core.tfstate'
         
     # Terraform plan and save output
@@ -248,9 +248,9 @@ stages:
               command: 'init'
               workingDirectory: '$(tf_k8s_path)'
               backendServiceArm: 'AzureServiceConnection'
-              backendAzureRmResourceGroupName: 'architecture_demo_tfstate_rg'
-              backendAzureRmStorageAccountName: 'tfstate000'
-              backendAzureRmContainerName: 'tfstate-container'
+              backendAzureRmResourceGroupName: 'architecture_demo_backend'
+              backendAzureRmStorageAccountName: 'account010'
+              backendAzureRmContainerName: 'container'
               backendAzureRmKey: 'k8s.tfstate'
               
           # Terraform plan and save output

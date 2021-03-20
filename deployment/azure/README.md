@@ -6,7 +6,12 @@
 az login
 
 # Create Terraform state backend
-sh scripts/init_remote_state_backend.sh
+sh scripts/create_backend_resources.sh
+
+# Add Facebook authentication secrets to key vault to enable Facebook login
+. scripts/init_env_vars.sh
+az keyvault secret set --vault-name $KEYVAULT_NAME --name "Facebook--AppId" --value "<Add Facebook AppId>"
+az keyvault secret set --vault-name $KEYVAULT_NAME --name "Facebook--AppSecret" --value "<Add Facebook AppId>"
 
 # Init Terraform infrastructure, do plan, and apply plan to create base infrastructure
 cd core
