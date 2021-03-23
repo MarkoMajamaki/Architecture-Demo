@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Azure.KeyVault;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 using AuthApi.Infrastructure;
-using AuthApi.Domain;
 
 namespace AuthApi
 {
@@ -39,6 +36,16 @@ namespace AuthApi
                     .AddJsonFile("appsettings.json", false, true)
                     .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
                     .AddEnvironmentVariables();
+
+                    // Configure Azure Key Vault
+                    var vaultName = config.Build()["KeyVaultName"];    
+                    if (string.IsNullOrEmpty(vaultName) == false)
+                    {              
+                        var azureServiceTokenProvider = new AzureServiceTokenProvider("RunAs=Developer; DeveloperTool=AzureCli");
+                        var keyVaultClient = new KeyVaultClient(
+                            new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
+                        config.AddAzureKeyVault($"https://{vaultName}.vault.azure.net/", keyVaultClient, new DefaultKeyVaultSecretManager());
+                    }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
