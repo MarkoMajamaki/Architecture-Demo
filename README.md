@@ -1,17 +1,16 @@
 # Architecture demo for Kubernetes ASP.NET project
 
-This is ASP.NET Kubernetes demo for training and learning. **Repo is still under heavy development and some features might not working!**
+This is ASP.NET Kubernetes demo for training and learning. 
 
-Used technologies:
-* ASP.NET
+**Repo is still under heavy development and some features might not working!**
+
+## Used technologies:
+Frontend
 * Flutter
-* Docker
-* Kubernetes
-* Helm
-* Azure
-* Azure Devops CI/CD
-* Terraform
-* Minikube
+
+Backend
+* Microservice clean architecture
+* ASP.NET
 * RabbitMq
 * SQL Server
 * Entity Framework
@@ -19,7 +18,20 @@ Used technologies:
 * MediatR
 * Swager
 * OAuth
-* Clean architecture
+
+Infrastructure
+* Local deployment with Minikube, Kind and docker compose
+* Production deployment to Azure using Terraform
+* Azure Kubernetes Services
+* Azure Container Registery
+* Azure Key Vault
+* Azure Devops CI/CD
+* Kubernetes
+* Docker
+* Helm charts
+
+Testing
+* xUnit integration and unit tests
 
 ## Facebook authentication secrets for local development
 ```bash
