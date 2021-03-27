@@ -1,12 +1,12 @@
 using System;
 using Xunit;
 
-namespace OrderApi.Application.Test
+namespace OrderApi.IntegrationTest
 {
     public class DummyTests
     {
         [Fact]
-        public void OrderApiTest()
+        public void DummyTest()
         {
             Assert.True(true);
         }

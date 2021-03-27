@@ -29,7 +29,7 @@ namespace OrderApi
                     var env = hostingcontext.HostingEnvironment;
 
                     // find the shared folder in the parent folder
-                    var sharedFolder = Path.Combine(env.ContentRootPath, "../..", "Shared");
+                    var sharedFolder = Path.Combine(env.ContentRootPath, "../../SharedApi", "Shared");
 
                     config
                     .AddJsonFile(Path.Combine(sharedFolder, "sharedsettings.json"), optional: true)

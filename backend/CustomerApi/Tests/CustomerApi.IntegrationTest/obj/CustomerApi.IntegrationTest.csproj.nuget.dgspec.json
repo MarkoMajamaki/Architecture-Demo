@@ -1,0 +1,550 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/Tests/CustomerApi.IntegrationTest/CustomerApi.IntegrationTest.csproj": {}
+  },
+  "projects": {
+    "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Application/CustomerApi.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Application/CustomerApi.Application.csproj",
+        "projectName": "CustomerApi.Application",
+        "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Application/CustomerApi.Application.csproj",
+        "packagesPath": "/Users/markomajamaki/.nuget/packages/",
+        "outputPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/markomajamaki/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Domain/CustomerApi.Domain.csproj": {
+                "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Domain/CustomerApi.Domain.csproj"
+              },
+              "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/SharedApi/SharedApi.csproj": {
+                "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/SharedApi/SharedApi.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            },
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[6.2.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.100/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Domain/CustomerApi.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Domain/CustomerApi.Domain.csproj",
+        "projectName": "CustomerApi.Domain",
+        "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Domain/CustomerApi.Domain.csproj",
+        "packagesPath": "/Users/markomajamaki/.nuget/packages/",
+        "outputPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/markomajamaki/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.100/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Infrastructure/CustomerApi.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Infrastructure/CustomerApi.Infrastructure.csproj",
+        "projectName": "CustomerApi.Infrastructure",
+        "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Infrastructure/CustomerApi.Infrastructure.csproj",
+        "packagesPath": "/Users/markomajamaki/.nuget/packages/",
+        "outputPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Infrastructure/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/markomajamaki/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Application/CustomerApi.Application.csproj": {
+                "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Application/CustomerApi.Application.csproj"
+              },
+              "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Domain/CustomerApi.Domain.csproj": {
+                "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Domain/CustomerApi.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.100/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi/CustomerApi.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi/CustomerApi.csproj",
+        "projectName": "CustomerApi",
+        "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi/CustomerApi.csproj",
+        "packagesPath": "/Users/markomajamaki/.nuget/packages/",
+        "outputPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/markomajamaki/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Application/CustomerApi.Application.csproj": {
+                "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Application/CustomerApi.Application.csproj"
+              },
+              "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Domain/CustomerApi.Domain.csproj": {
+                "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Domain/CustomerApi.Domain.csproj"
+              },
+              "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Infrastructure/CustomerApi.Infrastructure.csproj": {
+                "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Infrastructure/CustomerApi.Infrastructure.csproj"
+              },
+              "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/SharedApi/SharedApi.csproj": {
+                "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/SharedApi/SharedApi.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.1.0, )"
+            },
+            "MediatR.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[5.0.0, )",
+              "noWarn": [
+                "NU1605"
+              ]
+            },
+            "Microsoft.AspNetCore.Authentication.OpenIdConnect": {
+              "target": "Package",
+              "version": "[5.0.0, )",
+              "noWarn": [
+                "NU1605"
+              ]
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[5.6.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.100/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/Tests/CustomerApi.IntegrationTest/CustomerApi.IntegrationTest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/Tests/CustomerApi.IntegrationTest/CustomerApi.IntegrationTest.csproj",
+        "projectName": "CustomerApi.IntegrationTest",
+        "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/Tests/CustomerApi.IntegrationTest/CustomerApi.IntegrationTest.csproj",
+        "packagesPath": "/Users/markomajamaki/.nuget/packages/",
+        "outputPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/Tests/CustomerApi.IntegrationTest/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/markomajamaki/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Infrastructure/CustomerApi.Infrastructure.csproj": {
+                "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi.Infrastructure/CustomerApi.Infrastructure.csproj"
+              },
+              "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi/CustomerApi.csproj": {
+                "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/CustomerApi/CustomerApi/CustomerApi.csproj"
+              },
+              "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/Tests/SharedApi.IntegrationTest/SharedApi.IntegrationTest.csproj": {
+                "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/Tests/SharedApi.IntegrationTest/SharedApi.IntegrationTest.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Mvc.Testing": {
+              "target": "Package",
+              "version": "[5.0.4, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.7.1, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.3.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.4.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.100/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/SharedApi/SharedApi.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/SharedApi/SharedApi.csproj",
+        "projectName": "SharedApi",
+        "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/SharedApi/SharedApi.csproj",
+        "packagesPath": "/Users/markomajamaki/.nuget/packages/",
+        "outputPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/SharedApi/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/markomajamaki/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.100/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/Tests/SharedApi.IntegrationTest/SharedApi.IntegrationTest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/Tests/SharedApi.IntegrationTest/SharedApi.IntegrationTest.csproj",
+        "projectName": "SharedApi.IntegrationTest",
+        "projectPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/Tests/SharedApi.IntegrationTest/SharedApi.IntegrationTest.csproj",
+        "packagesPath": "/Users/markomajamaki/.nuget/packages/",
+        "outputPath": "/Users/markomajamaki/Development/Projects/Architecture-Demo/backend/Shared/Tests/SharedApi.IntegrationTest/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/markomajamaki/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Microsoft.AspNetCore.Mvc.Testing": {
+              "target": "Package",
+              "version": "[5.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[5.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.7.1, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.3.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.1, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.4.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.100/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

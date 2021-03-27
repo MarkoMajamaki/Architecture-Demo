@@ -1,12 +1,12 @@
 using System;
 using Xunit;
 
-namespace CustomerApi.Application.Test
+namespace CustomerApi.UnitTest
 {
     public class DummyTests
     {
         [Fact]
-        public void CustomerApiTest()
+        public void DummyTest()
         {
             Assert.True(true);
         }

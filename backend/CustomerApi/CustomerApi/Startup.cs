@@ -16,7 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
-using Shared;
+using SharedApi;
 using CustomerApi.Application;
 using CustomerApi.Domain;
 using CustomerApi.Infrastructure;

@@ -17,7 +17,7 @@ using Microsoft.OpenApi.Models;
 using OrderApi.Application;
 using OrderApi.Domain;
 using OrderApi.Infrastructure;
-using Shared;
+using SharedApi;
 
 namespace OrderApi
 {

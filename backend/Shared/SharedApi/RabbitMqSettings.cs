@@ -1,4 +1,4 @@
-namespace Shared
+namespace SharedApi
 {
     public class RabbitMqSettings
     {

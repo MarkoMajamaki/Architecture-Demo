@@ -15,7 +15,8 @@ using Microsoft.OpenApi.Models;
 using AuthApi.Domain;
 using AuthApi.Application;
 using AuthApi.Infrastructure;
-using Shared;
+using SharedApi;
+using Microsoft.AspNetCore.Authentication;
 
 namespace AuthApi
 {
@@ -53,34 +54,41 @@ namespace AuthApi
                 .AddEntityFrameworkStores<AuthContext>()  
                 .AddDefaultTokenProviders();  
   
+            // Add Facebook auth
             FacebookAuthSettings facebookAuth = Configuration.GetSection("Facebook").Get<FacebookAuthSettings>();
-            JwtSettings jwtSettings = Configuration.GetSection("JWT").Get<JwtSettings>();
-
-            // Adding Authentication  c
-            services.AddAuthentication(options =>  
-            {  
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
-            }).AddFacebook(facebookOptions => 
+            if (facebookAuth != null)
             {
-                facebookOptions.AppId = facebookAuth.AppId;
-                facebookOptions.AppSecret = facebookAuth.AppSecret;
-            })
-            // Adding Jwt Bearer  
-            .AddJwtBearer(options =>  
-            {  
-                options.SaveToken = true;  
-                options.RequireHttpsMetadata = false;  
-                options.TokenValidationParameters = new TokenValidationParameters()  
+                services.AddAuthentication().AddFacebook(facebookOptions => 
+                {
+                    facebookOptions.AppId = facebookAuth.AppId;
+                    facebookOptions.AppSecret = facebookAuth.AppSecret;
+                });
+            }
+
+            // Adding Jwt Bearer settings for authentication
+            JwtSettings jwtSettings = Configuration.GetSection("JWT").Get<JwtSettings>();
+            if (jwtSettings != null)
+            {       
+                services.AddAuthentication(options =>  
                 {  
-                    ValidateIssuer = true,  
-                    ValidateAudience = true,  
-                    ValidAudience = jwtSettings.ValidAudience,  
-                    ValidIssuer = jwtSettings.ValidIssuer,  
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret))  
-                };  
-            }); 
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
+                }).AddJwtBearer(options =>  
+                {  
+                    options.SaveToken = true;  
+                    options.RequireHttpsMetadata = false;  
+                    options.TokenValidationParameters = new TokenValidationParameters()  
+                    {  
+                        ValidateIssuer = true,  
+                        ValidateAudience = true,  
+                        ValidAudience = jwtSettings.ValidAudience,  
+                        ValidIssuer = jwtSettings.ValidIssuer,  
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret))  
+                    };  
+                }); 
+            }
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuthApi", Version = "v1" });

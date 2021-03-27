@@ -1,12 +1,12 @@
 using System;
 using Xunit;
 
-namespace AuthApi.Application.Test
+namespace OrderApi.UnitTest
 {
     public class DummyTests
     {
         [Fact]
-        public void AuthApiTest()
+        public void DummyTest()
         {
             Assert.True(true);
         }
