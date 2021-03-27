@@ -9,7 +9,7 @@ Frontend
 * Flutter
 
 Backend
-* Microservice clean architecture
+* Microservices with clean architecture
 * ASP.NET
 * RabbitMq
 * SQL Server
@@ -17,7 +17,7 @@ Backend
 * CQRS
 * MediatR
 * Swager
-* OAuth
+* OAuth with Facebook authentication
 
 Infrastructure
 * Local deployment with Minikube, Kind and docker compose
@@ -25,13 +25,18 @@ Infrastructure
 * Azure Kubernetes Services
 * Azure Container Registery
 * Azure Key Vault
-* Azure Devops CI/CD
 * Kubernetes
 * Docker
 * Helm charts
 
 Testing
 * xUnit integration and unit tests
+
+Azure Devops CI/CD pipeline
+1. Create infrastructure to Azure using Terraform
+2. Run integration and unit tests
+3. Build docker images and push to ACR
+4. Deploy services to AKS
 
 ## Facebook authentication secrets for local development
 ```bash

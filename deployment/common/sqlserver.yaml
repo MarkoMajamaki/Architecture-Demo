@@ -31,10 +31,6 @@ spec:
               key: SA_PASSWORD 
         - name: "MSSQL_PID"
           value: "Developer"
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
       volumes:
       - name: sqldata-storage
         persistentVolumeClaim:

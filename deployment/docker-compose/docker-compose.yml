@@ -41,7 +41,7 @@ services:
       - sqlserver
       - rabbitmq
     environment: 
-      DatabaseName: "order-db"
+      Database__Name: "order-db"
     env_file: 
       - ./rabbitmq.env
       - ./sqlserver.env
@@ -60,7 +60,7 @@ services:
       - sqlserver
       - rabbitmq
     environment: 
-      DatabaseName: "customer-db"
+      Database__Name: "customer-db"
     env_file: 
       - ./rabbitmq.env
       - ./sqlserver.env
@@ -78,7 +78,7 @@ services:
     depends_on: 
       - sqlserver
     environment: 
-      DatabaseName: "auth-db"
+      Database__Name: "auth-db"
     env_file: 
       - ./sqlserver.env
     ports:

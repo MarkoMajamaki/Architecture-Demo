@@ -8,10 +8,10 @@ COPY ["OrderApi/OrderApi/OrderApi.csproj", "OrderApi/OrderApi/"]
 COPY ["OrderApi/OrderApi.Application/OrderApi.Application.csproj", "OrderApi/OrderApi.Application/"]
 COPY ["OrderApi/OrderApi.Domain/OrderApi.Domain.csproj", "OrderApi/OrderApi.Domain/"]
 COPY ["OrderApi/OrderApi.Infrastructure/OrderApi.Infrastructure.csproj", "OrderApi/OrderApi.Infrastructure/"]
-COPY ["/Shared/Shared.csproj", "Shared/"]
+COPY ["/Shared/SharedApi/SharedApi.csproj", "Shared/SharedApi/"]
 RUN dotnet restore "OrderApi/OrderApi/OrderApi.csproj"
 COPY "OrderApi/" "OrderApi/"
-COPY "Shared/" "Shared/"
+COPY "Shared/SharedApi" "Shared/SharedApi"
 WORKDIR "/src/OrderApi/OrderApi/"
 RUN dotnet build "OrderApi.csproj" -c Release -o /app/build
 FROM build AS publish

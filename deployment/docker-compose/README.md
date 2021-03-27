@@ -3,8 +3,8 @@
 
 ```bash
 # Deploy with docker compose
-sh deployment/docker-compose/deploy.sh deploy
+sh deploy.sh deploy
 
 # Destroy deployment
-sh deployment/docker-compose/deploy.sh destroy
+sh deploy.sh destroy
 ```
