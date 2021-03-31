@@ -34,11 +34,11 @@ resource "kubernetes_deployment" "customer-api" {
             }
           }
           env {
-            name = "DatabaseName"
+            name = "Database__Name"
             value = "customer-db"
           }
           env {
-            name = "DatabasePassword"   
+            name = "Database__Password"   
             value_from {
               secret_key_ref {
                 name = kubernetes_secret.sqlserver.metadata.0.name

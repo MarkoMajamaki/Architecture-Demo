@@ -112,9 +112,9 @@ resource "kubernetes_config_map" "sqlserver-config" {
   }
 
   data = {
-    DatabaseServer = "sqlserver"
-    DatabasePort = "1433"
-    DatabaseUser = "sa"
+    Database__Server = "sqlserver"
+    Database__Port = "1433"
+    Database__User = "sa"
   }
 }
 

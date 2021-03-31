@@ -34,17 +34,33 @@ resource "kubernetes_deployment" "auth-api" {
             }
           }
           env {
-            name = "DatabaseName"
+            name = "Database__Name"
             value = "auth-db"
           }
           env {
-            name = "DatabasePassword"   
+            name = "Database__Password"   
             value_from {
               secret_key_ref {
                 name = kubernetes_secret.sqlserver.metadata.0.name
                 key = "password"
               }
             }
+          }
+
+          volume_mount {
+            name = "keyvault" 
+            mount_path = "/mnt/secrets-store"
+            read_only = true
+          }
+        }
+        volume {
+          name = "keyvault"
+          csi {
+            driver = "secrets-store.csi.k8s.io"
+            read_only = true
+            volume_attributes = {
+              "secretProviderClass" = "azure-keyvault"
+            }            
           }
         }
       }
