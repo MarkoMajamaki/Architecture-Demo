@@ -2,7 +2,11 @@
 
 set -e
 
-. scripts/init_env_vars.sh
+LOCATION=northeurope
+RESOURCE_GROUP_NAME=architecture_demo_backend
+STORAGE_ACCOUNT_NAME=account010
+CONTAINER_NAME=container
+KEYVAULT_NAME=keyvault-000
 
 # Create the resource group
 if  ( `az group exists --resource-group $RESOURCE_GROUP_NAME` == "true" );

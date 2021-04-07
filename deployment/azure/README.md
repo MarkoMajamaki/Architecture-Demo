@@ -8,12 +8,7 @@ az login
 # Create Terraform state backend
 sh scripts/create_backend_resources.sh
 
-# Add Facebook authentication secrets to key vault to enable Facebook login
-. scripts/init_env_vars.sh
-az keyvault secret set --vault-name $KEYVAULT_NAME --name "Facebook--AppId" --value "<Add Facebook AppId>"
-az keyvault secret set --vault-name $KEYVAULT_NAME --name "Facebook--AppSecret" --value "<Add Facebook AppId>"
-
-# Init Terraform infrastructure, do plan, and apply plan to create base infrastructure
+# Init Terraform core infrastructure, do plan, and apply plan to create base infrastructure
 cd core
 terraform init
 terraform plan -out=tfplan
@@ -34,7 +29,10 @@ terraform plan -out tfplan
 terraform apply tfplan
 
 # Configure kubectl to connect to your Kubernetes cluster
-az aks get-credentials --resource-group architecture_demo_rg --name ArchitectureDemoAKS
+az aks get-credentials --resource-group architecture_demo --name ArchitectureDemoAKS
+
+# Configure vault secrets 
+# TODO!
 
 # Check ingress external ip
 kubectl --namespace architecture-demo get services -o wide -w ingress-controller-ingress-nginx-controller

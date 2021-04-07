@@ -1,5 +1,0 @@
-export LOCATION=northeurope
-export RESOURCE_GROUP_NAME=architecture_demo_backend
-export STORAGE_ACCOUNT_NAME=account010
-export CONTAINER_NAME=container
-export KEYVAULT_NAME=keyvault-000

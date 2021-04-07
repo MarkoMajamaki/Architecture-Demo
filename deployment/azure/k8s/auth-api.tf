@@ -17,12 +17,20 @@ resource "kubernetes_deployment" "auth-api" {
 
     template {
       metadata {
+        annotations = {
+          "vault.hashicorp.com/agent-inject" = "true"
+          "vault.hashicorp.com/role": "auth-config-role"
+          "vault.hashicorp.com/agent-inject-secret-facebook-auth-config.txt": "secret/facebook_auth_config"
+        }
+
         labels = {
           app = "auth-api"
         }
       }
 
       spec {
+        service_account_name = kubernetes_service_account.vault_service_account.metadata.0.name
+
         container {
           image = "architecturedemoacr.azurecr.io/auth-api:v1"
           name  = "auth-api"
@@ -45,22 +53,6 @@ resource "kubernetes_deployment" "auth-api" {
                 key = "password"
               }
             }
-          }
-
-          volume_mount {
-            name = "keyvault" 
-            mount_path = "/mnt/secrets-store"
-            read_only = true
-          }
-        }
-        volume {
-          name = "keyvault"
-          csi {
-            driver = "secrets-store.csi.k8s.io"
-            read_only = true
-            volume_attributes = {
-              "secretProviderClass" = "azure-keyvault"
-            }            
           }
         }
       }

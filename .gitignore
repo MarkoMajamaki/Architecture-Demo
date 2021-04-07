@@ -50,3 +50,4 @@ backend/CustomerApi/Tests/CustomerApi.IntegrationTest/obj/
 backend/CustomerApi/Tests/CustomerApi.IntegrationTest/bin/
 backend/CustomerApi/Tests/CustomerApi.UnitTest/obj/
 backend/CustomerApi/Tests/CustomerApi.UnitTest/bin/
+cluster-keys.json

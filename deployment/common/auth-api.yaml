@@ -9,9 +9,14 @@ spec:
       app: auth-api
   template:
     metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "auth-config-role"
+        vault.hashicorp.com/agent-inject-secret-facebook-auth-config.txt: "secret/facebook_auth_config"
       labels:
         app: auth-api
     spec:
+      serviceAccount: vault-service-account
       containers:
       - name: auth-api
         image: architecture_demo/auth-api:v1

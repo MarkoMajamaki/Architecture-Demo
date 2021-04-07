@@ -37,12 +37,17 @@ deploy()
     --selector=app.kubernetes.io/component=controller \
     --timeout=90s
 
+    # Set vault
+    sh ../common/vault.sh create
+    sh ../common/vault.sh init
+
     # Deploy Kind PersistentVolumeClaim for sql server
     kubectl apply -f deployment/kind/sqlserver-pvc.yaml 
 
     # Deploy common services
 	kubectl apply -f deployment/common/rabbitmq-config.yaml 
 	kubectl apply -f deployment/common/sqlserver.yaml 
+    kubectl apply -f deployment/common/vault-service-account.yaml 
 	kubectl apply -f deployment/common/auth-api.yaml
 	kubectl apply -f deployment/common/customer-api.yaml
 	kubectl apply -f deployment/common/order-api.yaml
