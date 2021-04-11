@@ -16,7 +16,7 @@ stages:
       vmImage: 'ubuntu-latest'
 
     variables:
-      tf_core_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/azure/core'
+      tf_core_infrastructure_path: '$(System.DefaultWorkingDirectory)/deployment/prod/azure/core'
 
     steps:
     # Add tf state backend
@@ -26,7 +26,7 @@ stages:
         azureSubscription: 'AzureServiceConnection'
         scriptType: 'bash'
         scriptLocation: 'scriptPath'
-        scriptPath: 'deployment/azure/scripts/create_backend_resources.sh'
+        scriptPath: 'deployment/prod/azure/scripts/create_backend_resources.sh'
 
     # Install terraform
     - task: TerraformInstaller@0
@@ -120,6 +120,7 @@ stages:
       inputs:
         testSelector: 'testAssemblies'
         testAssemblyVer2: |
+          **\AuthApi.*Test.dll
           **\CustomerApi.*Test.dll
           **\OrderApi.*Test.dll
           !**\*TestAdapter.dll
@@ -191,7 +192,7 @@ stages:
         azureSubscription: 'AzureServiceConnection'
         scriptType: 'bash'
         scriptLocation: 'scriptPath'
-        scriptPath: '$(System.DefaultWorkingDirectory)/deployment/azure/scripts/build_and_push_acr.sh'
+        scriptPath: '$(System.DefaultWorkingDirectory)/deployment/prod/azure/scripts/build_and_push_acr.sh'
 
 #
 # Pull images from ACR and deploy with Terraform Kubernetes provider
@@ -206,7 +207,7 @@ stages:
       vmImage: 'ubuntu-latest'
 
     variables:
-      tf_k8s_path: '$(System.DefaultWorkingDirectory)/deployment/azure/k8s'
+      tf_k8s_path: '$(System.DefaultWorkingDirectory)/deployment/prod/azure/k8s'
 
     environment: Prod
 

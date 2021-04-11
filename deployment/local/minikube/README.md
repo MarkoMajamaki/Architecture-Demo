@@ -3,8 +3,8 @@
 ```bash
 # Close docker desktop and remove <minikube ip> architecture-demo.info from /etc/hosts if this is NOT first time to deploy!
 
-# Deploy to minikube
-sh deploy.sh deploy
+# # Go to repo root directory and deploy backend project to Minikube
+sh deployment/local/minikube/deploy.sh deploy
 
 # Open client
 open https://architecture-demo.info
@@ -20,5 +20,5 @@ kubectl port-forward --namespace architecture-demo svc/rabbitmq 15672:15672
 http://127.0.0.1:15672
 
 # Destroy minikube
-sh deploy.sh destroy
+sh deployment/local/minikube/deploy.sh destroy
 ```

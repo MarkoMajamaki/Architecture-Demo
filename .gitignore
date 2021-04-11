@@ -25,15 +25,6 @@ backend/AuthApi/AuthApi.Infrastructure/obj
 backend/AuthApi/AuthApi.Messaging/obj
 backend/AuthApi/AuthApi/bin
 backend/AuthApi/AuthApi/obj
-deployment/azure/core/.terraform/
-deployment/azure/core/.terraform.lock.hcl
-deployment/azure/core/tfplan
-deployment/azure/k8s/.terraform/
-deployment/azure/k8s/.terraform.lock.hcl
-deployment/azure/k8s/tfplan
-deployment/azure/k8s/kube_config
-deployment/tls.crt
-deployment/tls.key
 backend/Shared/SharedApi/obj/
 backend/Shared/SharedApi/bin/
 backend/Shared/Tests/SharedApi.IntegrationTest/obj/
@@ -50,4 +41,11 @@ backend/CustomerApi/Tests/CustomerApi.IntegrationTest/obj/
 backend/CustomerApi/Tests/CustomerApi.IntegrationTest/bin/
 backend/CustomerApi/Tests/CustomerApi.UnitTest/obj/
 backend/CustomerApi/Tests/CustomerApi.UnitTest/bin/
+deployment/prod/azure/core/.terraform/
+deployment/prod/azure/core/.terraform.lock.hcl
+deployment/prod/azure/core/tfplan
+deployment/prod/azure/k8s/.terraform/
+deployment/prod/azure/k8s/.terraform.lock.hcl
+deployment/prod/azure/k8s/tfplan
+deployment/prod/azure/k8s/kube_config
 cluster-keys.json

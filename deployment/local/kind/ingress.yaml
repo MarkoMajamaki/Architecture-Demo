@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  namespace: architecture-demo
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  tls:
+  - secretName: ingress-tls-secret
+    hosts:
+      - "localhost"
+  rules:
+    - http:
+        paths:
+        - path: /(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: frontend
+              port:
+                number: 80
+        - path: /auth-api/(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: auth-api
+              port:
+                number: 80
+        - path: /customer-api/(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: customer-api
+              port:
+                number: 80
+        - path: /order-api/(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: order-api
+              port:
+                number: 80
