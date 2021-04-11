@@ -38,12 +38,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: order-api-service
+  name: order-api
   namespace: architecture-demo
 spec:
   type: ClusterIP
   selector:
-    app: order-api-pod
+    app: order-api
   ports:
   - protocol: TCP
     port: 80

@@ -2,36 +2,35 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "build_orderapi",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/backend/AuthApi/AuthApi/AuthApi.csproj",
+                "${workspaceFolder}/backend/OrderApi/OrderApi/OrderApi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "publish",
+            "label": "build_customerapi",
             "command": "dotnet",
             "type": "process",
             "args": [
-                "publish",
-                "${workspaceFolder}/backend/AuthApi/AuthApi/AuthApi.csproj",
+                "build",
+                "${workspaceFolder}/backend/CustomerApi/CustomerApi/CustomerApi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "watch",
+            "label": "build_authapi",
             "command": "dotnet",
             "type": "process",
             "args": [
-                "watch",
-                "run",
+                "build",
                 "${workspaceFolder}/backend/AuthApi/AuthApi/AuthApi.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
