@@ -57,7 +57,7 @@ dotnet user-secrets set "Facebook:AppId" "Your_Facebook_AppId"
 dotnet user-secrets set "Facebook:AppSecret" "Your_Facebook_AppSecret"
 ```
 
-#### Set secrets to Hashicorp Vault after deployment
+#### Set secrets to Hashicorp Vault
 ```bash
 # Initialize Vault with five key share and three key threshold.
 kubectl exec vault-0 -- vault operator init -key-shares=5 -key-threshold=3 -format=json > cluster-keys.json
