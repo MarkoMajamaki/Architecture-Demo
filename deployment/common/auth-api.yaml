@@ -12,7 +12,16 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/role: "auth-config-role"
-        vault.hashicorp.com/agent-inject-secret-facebook-auth-config.txt: "secret/facebook_auth_config"
+        vault.hashicorp.com/agent-inject-secret-facebook-auth-config.json: "secret/facebook_auth_config"
+        vault.hashicorp.com/agent-inject-template-facebook-auth-config.json: |
+          {{- with secret "secret/facebook_auth_config" -}}
+          {
+            "Facebook": {
+              "AppId":"{{ .Data.AppId }}",
+              "AppSecret":"{{ .Data.AppSecret }}"
+            }
+          }
+          {{- end }}
       labels:
         app: auth-api
     spec:

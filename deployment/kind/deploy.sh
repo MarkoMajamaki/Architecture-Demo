@@ -15,15 +15,15 @@ deploy()
 	docker pull mcr.microsoft.com/mssql/server:latest
 
     # Create cluster with config
-    kind create cluster --name architecture-demo-cluster --config deployment/kind/kind.config
+    kind create cluster --name architecture-demo --config deployment/kind/kind.config
 
     # Load images to cluster
-    kind load docker-image architecture_demo/auth-api:v1 --name architecture-demo-cluster
-    kind load docker-image architecture_demo/customer-api:v1 --name architecture-demo-cluster
-    kind load docker-image architecture_demo/order-api:v1 --name architecture-demo-cluster
-    kind load docker-image architecture_demo/frontend:v1 --name architecture-demo-cluster
-    kind load docker-image rabbitmq:3.8-management --name architecture-demo-cluster
-    kind load docker-image mcr.microsoft.com/mssql/server:latest --name architecture-demo-cluster
+    kind load docker-image architecture_demo/auth-api:v1 --name architecture-demo
+    kind load docker-image architecture_demo/customer-api:v1 --name architecture-demo
+    kind load docker-image architecture_demo/order-api:v1 --name architecture-demo
+    kind load docker-image architecture_demo/frontend:v1 --name architecture-demo
+    kind load docker-image rabbitmq:3.8-management --name architecture-demo
+    kind load docker-image mcr.microsoft.com/mssql/server:latest --name architecture-demo
 
     # Add namespace
     kubectl apply -f deployment/common/namespace.yaml 
@@ -38,8 +38,8 @@ deploy()
     --timeout=90s
 
     # Set vault
-    sh ../common/vault.sh create
-    sh ../common/vault.sh init
+    sh deployment/common/deploy_vault.sh create
+    # sh deployment/common/deploy_vault.sh unseal
 
     # Deploy Kind PersistentVolumeClaim for sql server
     kubectl apply -f deployment/kind/sqlserver-pvc.yaml 
@@ -66,7 +66,7 @@ deploy()
 
 destroy()
 {
-    kind delete cluster --name architecture-demo-cluster
+    kind delete cluster --name architecture-demo
 }
 
 "$@"

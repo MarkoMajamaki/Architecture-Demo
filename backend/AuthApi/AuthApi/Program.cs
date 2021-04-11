@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using AuthApi.Infrastructure;
+using System;
 
 namespace AuthApi
 {
@@ -37,6 +38,25 @@ namespace AuthApi
                     .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
                     .AddEnvironmentVariables();
 
+                    // Configure Hashicorp Vault
+                    var vaultFolder = "/vault/secrets";
+                    if (Directory.Exists(vaultFolder))
+                    {
+                        var vaultFiles = Directory.GetFiles(vaultFolder); 
+                        foreach (string path in vaultFiles)
+                        {
+                            if (path.EndsWith(".json"))
+                            {
+                                System.Console.WriteLine($"Vault json file found from path: {path}");
+                                config.AddJsonFile(path, true, true);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        System.Console.WriteLine($"Hashicorp Vault folder not found from path: {vaultFolder}");
+                    }
+
                     // Configure Azure Key Vault
                     var vaultName = config.Build()["KeyVaultName"];    
                     if (string.IsNullOrEmpty(vaultName) == false)
@@ -45,6 +65,10 @@ namespace AuthApi
                         var keyVaultClient = new KeyVaultClient(
                             new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
                         config.AddAzureKeyVault($"https://{vaultName}.vault.azure.net/", keyVaultClient, new DefaultKeyVaultSecretManager());
+                    }
+                    else
+                    {
+                        System.Console.WriteLine("Azure Key Vault name is not found from any config file");
                     }
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
