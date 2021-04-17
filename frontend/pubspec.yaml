@@ -17,7 +17,7 @@ dependencies:
   flutkit: ^0.0.2
   get_it: ^6.0.0
   provider: ^5.0.0
-  http: ^0.13.0
+  http: ^0.13.1
   uuid: 3.0.1
 
 dev_dependencies:

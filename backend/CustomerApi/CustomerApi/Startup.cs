@@ -25,6 +25,8 @@ namespace CustomerApi
 {
     public class Startup
     {
+        private const string _corsPolicyName = "DevelopmentPolicy";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,6 +43,14 @@ namespace CustomerApi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomerApi", Version = "v1" });
+            });
+
+            services.AddCors(options => 
+            {
+                options.AddPolicy(_corsPolicyName, builder => 
+                {
+                    builder.AllowAnyOrigin();
+                });
             });
 
             DatabaseSettings dbSettings = Configuration.GetSection("Database").Get<DatabaseSettings>();
@@ -75,6 +85,11 @@ namespace CustomerApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            if (env.IsDevelopment())
+            {
+                app.UseCors(_corsPolicyName);
+            }
 
             app.UseAuthorization();
 

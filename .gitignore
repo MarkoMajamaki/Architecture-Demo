@@ -48,4 +48,6 @@ deployment/prod/azure/k8s/.terraform/
 deployment/prod/azure/k8s/.terraform.lock.hcl
 deployment/prod/azure/k8s/tfplan
 deployment/prod/azure/k8s/kube_config
+deployment/local/docker-compose/data/
 cluster-keys.json
+deployment/local/docker-compose/certs/

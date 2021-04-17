@@ -9,7 +9,7 @@ deploy()
 	docker pull mcr.microsoft.com/mssql/server:latest
 
     # Create cluster with config
-    kind create cluster --name architecture-demo --config deployment/kind/kind.config
+    kind create cluster --name architecture-demo --config deployment/local/kind/kind.config
 
     # Load images to cluster
     kind load docker-image architecture_demo/auth-api:v1 --name architecture-demo

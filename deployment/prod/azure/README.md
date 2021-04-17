@@ -5,11 +5,11 @@
 # Login to Azure
 az login
 
-# Create Terraform state backend
-sh scripts/create_backend_resources.sh
+# Go to repo root directory and create Terraform state backend
+sh deployment/prod/azure/scripts/create_backend_resources.sh
 
 # Init Terraform core infrastructure, do plan, and apply plan to create base infrastructure
-cd core
+cd deployment/prod/azure/core
 terraform init
 terraform plan -out=tfplan
 terraform apply tfplan
@@ -17,11 +17,12 @@ terraform apply tfplan
 # Save AKS config to file from Terraform output
 terraform output -raw aks_kube_config > ../k8s/kube_config
 
-# Go to root folder, start docker, build docker images and push to Azure Container Registery.
+cd ../../../
+# Start docker, build docker images and push to Azure Container Registery.
 sh deployment/azure/scripts/build_and_push_acr.sh
 
 # Go to Terraform kubernetes folder
-cd k8s
+cd deployment/prod/azure/k8s
 
 # Init k8s terraform, do plan, and apply plan to create Kubernetes services with Terraform
 terraform init

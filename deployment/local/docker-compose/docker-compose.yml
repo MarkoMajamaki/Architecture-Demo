@@ -19,12 +19,14 @@ services:
       SA_PASSWORD: "mssQlp4ssword#"
     ports:
       - "1433:1433"
+    volumes:
+      - ./data:/var/opt/mssql/data
 
   frontend:
     image: architecture_demo/frontend:v1
     container_name: frontend
     build:
-      context: ../../frontend
+      context: ../../../frontend
       dockerfile: Dockerfile
     ports:
       - "8001:80"
@@ -35,13 +37,14 @@ services:
     restart: on-failure   
     build:
       # target: debug
-      context: ../../backend/OrderApi
-      dockerfile: Dockerfile
+      context: ../../../backend
+      dockerfile: OrderApi/Dockerfile
     depends_on: 
       - sqlserver
       - rabbitmq
     environment: 
       Database__Name: "order-db"
+      ASPNETCORE_ENVIRONMENT: Development
     env_file: 
       - ./rabbitmq.env
       - ./sqlserver.env
@@ -53,14 +56,15 @@ services:
     container_name: customerapi
     restart: on-failure
     build:
-      context: ../../backend/CustomerApi
-      dockerfile: Dockerfile
+      context: ../../../backend
+      dockerfile: CustomerApi/Dockerfile
       # target: debug
     depends_on: 
       - sqlserver
       - rabbitmq
     environment: 
       Database__Name: "customer-db"
+      ASPNETCORE_ENVIRONMENT: Development
     env_file: 
       - ./rabbitmq.env
       - ./sqlserver.env
@@ -73,12 +77,13 @@ services:
     restart: on-failure   
     build:
       # target: debug
-      context: ../../backend/AuthApi
-      dockerfile: Dockerfile
+      context: ../../../backend
+      dockerfile: AuthApi/Dockerfile
     depends_on: 
       - sqlserver
     environment: 
       Database__Name: "auth-db"
+      ASPNETCORE_ENVIRONMENT: Development
     env_file: 
       - ./sqlserver.env
     ports:
@@ -88,7 +93,8 @@ services:
     image: nginx:latest
     container_name: nginx_gateway
     ports:
-      - "8080:8080"
+      - "80:80"
+      - "443:443"
     depends_on: 
       - customerapi
       - orderapi
@@ -96,3 +102,4 @@ services:
       - frontend
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./certs:/etc/nginx/certs

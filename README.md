@@ -121,6 +121,7 @@ exit
 ```
 
 ### Mirror all RabbitMQ nodes
+TODO: Move this to Helm chart config
 ```
 # Open RabbitMQ first node
 kubectl exec -it rabbitmq-0 bash -n architecture-demo
